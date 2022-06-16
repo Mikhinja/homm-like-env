@@ -1,0 +1,75 @@
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+training...
+----------------------------------
+| rollout/           |           |
+|    ep_len_mean     | 400       |
+|    ep_rew_mean     | -6.38e+03 |
+| time/              |           |
+|    fps             | 17        |
+|    iterations      | 1         |
+|    time_elapsed    | 119       |
+|    total_timesteps | 2048      |
+----------------------------------
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 400          |
+|    ep_rew_mean          | -6.05e+03    |
+| time/                   |              |
+|    fps                  | 7            |
+|    iterations           | 2            |
+|    time_elapsed         | 534          |
+|    total_timesteps      | 4096         |
+| train/                  |              |
+|    approx_kl            | 6.139773e-06 |
+|    clip_fraction        | 0            |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -8.65        |
+|    explained_variance   | -4.65e-06    |
+|    learning_rate        | 0.0003       |
+|    loss                 | 1.04e+05     |
+|    n_updates            | 10           |
+|    policy_gradient_loss | -0.00118     |
+|    value_loss           | 5.23e+05     |
+------------------------------------------
+------------------------------------------
+| rollout/                |              |
+|    ep_len_mean          | 358          |
+|    ep_rew_mean          | -5.91e+03    |
+| time/                   |              |
+|    fps                  | 6            |
+|    iterations           | 3            |
+|    time_elapsed         | 944          |
+|    total_timesteps      | 6144         |
+| train/                  |              |
+|    approx_kl            | 7.752844e-05 |
+|    clip_fraction        | 0            |
+|    clip_range           | 0.2          |
+|    entropy_loss         | -8.65        |
+|    explained_variance   | 0            |
+|    learning_rate        | 0.0003       |
+|    loss                 | 1.59e+05     |
+|    n_updates            | 20           |
+|    policy_gradient_loss | -0.00344     |
+|    value_loss           | 4.28e+05     |
+------------------------------------------
+training done in  1241.01s.
+evaluating...
+evaluated in  51.60s, mean_reward=-400.0, std_reward=0.0
+playing a game (at most 1000 steps)
+after 399 steps played in  24.93s: game.ended=True, day=1:2:4
+	 total-actions=542, P1-total-actions=410
+	 num-invalid-actions=400
+	 num-valid-actions=10, won=False, defeated=False, end-AIVal=2852
+[  39] day= 0 action: [P1] end turn None None None
+[  92] day= 1 action: [P1] end turn None None None
+[ 184] day= 2 action: [P1] end turn None None None
+[ 235] day= 3 action: [P1] end turn None None None
+[ 284] day= 4 action: [P1] end turn None None None
+[ 344] day= 5 action: [P1] end turn None None None
+[ 388] day= 6 action: [P1] end turn None None None
+[ 442] day= 7 action: [P1] end turn None None None
+[ 489] day= 8 action: [P1] end turn None None None
+[ 535] day= 9 action: [P1] end turn None None None
+(total time so far  1321.007s)

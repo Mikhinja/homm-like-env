@@ -1,0 +1,110 @@
+train_test.stats% stats 100
+Sun May 22 01:21:58 2022    train_test.stats
+
+         140008331 function calls (98040248 primitive calls) in 454.392 seconds
+
+   Ordered by: internal time
+   List reduced from 7210 to 100 due to restriction <100>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      320   57.245    0.179   57.245    0.179 {method 'run_backward' of 'torch._C._EngineBase' objects}
+    15411   50.428    0.003   50.428    0.003 {built-in method torch._C._nn.linear}
+     3840   44.270    0.012   44.270    0.012 {method 'sqrt' of 'torch._C._TensorBase' objects}
+      320   29.028    0.091  140.845    0.440 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\optim\_functional.py:64(adam)
+  1727856   27.385    0.000   27.385    0.000 {built-in method torch._C._nn.one_hot}
+    11526   24.314    0.002   24.314    0.002 {method 'mul_' of 'torch._C._TensorBase' objects}
+     7680   21.635    0.003   21.635    0.003 {method 'add_' of 'torch._C._TensorBase' objects}
+  1797401   20.994    0.000   20.994    0.000 {method 'float' of 'torch._C._TensorBase' objects}
+     4160   19.913    0.005   19.913    0.005 {built-in method norm}
+     3840   16.806    0.004   16.806    0.004 {method 'addcdiv_' of 'torch._C._TensorBase' objects}
+     2769   14.680    0.005   14.680    0.005 {built-in method cat}
+     3840   12.824    0.003   12.824    0.003 {method 'addcmul_' of 'torch._C._TensorBase' objects}
+25649775/3696169   10.362    0.000   15.910    0.000 C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.1264.0_x64__qbz5n2kfra8p0\lib\json\encoder.py:333(_iterencode_dict)
+     3828    8.341    0.002    8.341    0.002 {method 'zero_' of 'torch._C._TensorBase' objects}
+1799850/2769    7.769    0.000   60.283    0.022 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\preprocessing.py:85(preprocess_obs)
+14894786/3696826    6.404    0.000   17.425    0.000 C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.1264.0_x64__qbz5n2kfra8p0\lib\json\encoder.py:277(_iterencode_list)
+  1589401    4.827    0.000    4.827    0.000 {built-in method as_tensor}
+     2048    3.256    0.002    5.597    0.003 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\buffers.py:696(add)
+      320    3.227    0.010   57.884    0.181 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\policies.py:632(evaluate_actions)
+  1730544    2.818    0.000    2.818    0.000 {method 'long' of 'torch._C._TensorBase' objects}
+1837857/4932    2.535    0.000  108.126    0.022 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\module.py:1104(_call_impl)
+  3062247    2.440    0.000    2.440    0.000 {built-in method numpy.array}
+   209347    2.252    0.000    2.252    0.000 {built-in method tensor}
+  1797721    2.065    0.000    2.065    0.000 {method 'flatten' of 'torch._C._TensorBase' objects}
+12590752/12590678    1.786    0.000    1.830    0.000 {built-in method builtins.isinstance}
+     2769    1.546    0.001   22.339    0.008 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\torch_layers.py:272(forward)
+2375369/477560    1.440    0.000    1.564    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\module.py:1668(named_modules)
+  1806396    1.424    0.000    1.424    0.000 {method 'to' of 'torch._C._TensorBase' objects}
+  3696826    1.353    0.000   18.778    0.000 C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.1264.0_x64__qbz5n2kfra8p0\lib\json\encoder.py:413(_iterencode)
+      320    1.298    0.004    3.995    0.012 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\buffers.py:763(<dictcomp>)
+     1216    1.261    0.001    7.951    0.007 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:726(FindPathTo)
+     2449    1.189    0.000    7.188    0.003 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\utils.py:450(<dictcomp>)
+        6    1.182    0.197    1.182    0.197 {built-in method torch._C._linalg.linalg_qr}
+   747718    1.022    0.000    2.792    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:698(CanStepOn)
+     4245    0.999    0.000    0.999    0.000 {method 'update' of 'dict' objects}
+   439844    0.991    0.000    2.550    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\util.py:377(is_reducible)
+656104/2648    0.991    0.000    1.870    0.001 C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.1264.0_x64__qbz5n2kfra8p0\lib\copy.py:128(deepcopy)
+   615130    0.930    0.000    1.588    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:715(__adj_dist__)
+  1464746    0.896    0.000    3.612    0.000 <__array_function__ internals>:177(copy)
+  1797081    0.895    0.000    2.951    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\flatten.py:44(forward)
+     2250    0.893    0.000    4.489    0.002 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\vec_env\util.py:22(<listcomp>)
+     2770    0.855    0.000    0.855    0.000 {method 'softmax' of 'torch._C._TensorBase' objects}
+75134/137    0.833    0.000   10.524    0.077 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\pickler.py:395(_flatten_obj_instance)
+       73    0.815    0.011   19.649    0.269 C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.1264.0_x64__qbz5n2kfra8p0\lib\json\encoder.py:182(encode)
+  1335374    0.736    0.000    0.736    0.000 {method 'copy' of 'numpy.ndarray' objects}
+  1837929    0.726    0.000    0.726    0.000 {built-in method torch._C._get_tracing_state}
+  2056681    0.720    0.000    0.720    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\gym\spaces\dict.py:160(__getitem__)
+   292562    0.686    0.000    1.248    0.000 {built-in method builtins.min}
+     2048    0.663    0.000   72.267    0.035 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\policies.py:579(forward)
+     2768    0.656    0.000    0.656    0.000 {method 'logsumexp' of 'torch._C._TensorBase' objects}
+  1540284    0.648    0.000    0.648    0.000 {method 'reshape' of 'numpy.ndarray' objects}
+282336/73    0.644    0.000   10.531    0.144 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\pickler.py:295(_flatten_obj)
+1465798/1465548    0.615    0.000    2.508    0.000 {built-in method numpy.core._multiarray_umath.implement_array_function}
+   276413    0.608    0.000    0.838    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\module.py:1188(__setattr__)
+  1035468    0.600    0.000    0.600    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:696(__is_in_bounds__)
+733746/73    0.597    0.000   10.532    0.144 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\pickler.py:272(_flatten_impl)
+  3801530    0.597    0.000    0.597    0.000 {method 'get' of 'dict' objects}
+    75134    0.574    0.000    3.716    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\util.py:411(has_reduce)
+      400    0.546    0.001    5.439    0.014 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\policies.py:217(obs_to_tensor)
+     2250    0.545    0.000    0.545    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\vec_env\dummy_vec_env.py:89(_save_obs)
+  3355792    0.544    0.000    0.544    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:743(<lambda>)
+  2504703    0.526    0.000    0.527    0.000 {built-in method builtins.hasattr}
+    87510    0.514    0.000    3.130    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:730(<listcomp>)
+   772292    0.508    0.000    0.508    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:713(MovementFactorAt)
+267732/402    0.476    0.000    1.993    0.005 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\module.py:1713(train)
+  1464746    0.469    0.000    1.884    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\numpy\lib\function_base.py:846(copy)
+  1949752    0.413    0.000    0.429    0.000 {built-in method builtins.getattr}
+   656998    0.407    0.000    0.946    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:575(GetTownAt)
+  2538242    0.370    0.000    0.370    0.000 {method 'append' of 'list' objects}
+   727131    0.367    0.000    0.367    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMData\HOMMMapData.py:20(can_step_on)
+   537738    0.364    0.000    0.443    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\module.py:1621(named_children)
+        6    0.360    0.060    0.360    0.060 {method 'normal_' of 'torch._C._TensorBase' objects}
+733746/73    0.359    0.000   10.532    0.144 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\pickler.py:262(_flatten)
+    19648    0.355    0.000    0.441    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\GymEnv.py:196(__hero_obs__)
+   282336    0.350    0.000    0.728    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\pickler.py:326(_get_flattener)
+    39296    0.344    0.000    0.355    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\GymEnv.py:236(__neutral_obs__)
+   658687    0.330    0.000    0.330    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:576(<genexpr>)
+250898/1022    0.328    0.000   10.507    0.010 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\pickler.py:647(_flatten_key_value_pair)
+    19648    0.326    0.000    0.391    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\GymEnv.py:219(__town_obs__)
+   730570    0.317    0.000    0.428    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\util.py:395(in_dict)
+     2250    0.313    0.000    4.803    0.002 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\vec_env\util.py:14(copy_obs_dict)
+        1    0.303    0.303  298.262  298.262 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\ppo\ppo.py:169(train)
+     4974    0.298    0.000    2.124    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\module.py:1501(_named_members)
+  2685051    0.297    0.000    0.297    0.000 {built-in method builtins.abs}
+    32044    0.288    0.000    0.473    0.000 C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.1264.0_x64__qbz5n2kfra8p0\lib\inspect.py:744(cleandoc)
+       12    0.274    0.023    0.274    0.023 {method 'uniform_' of 'torch._C._TensorBase' objects}
+   537738    0.264    0.000    0.706    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\nn\modules\module.py:1612(children)
+   157639    0.259    0.000    0.397    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:731(h)
+     2068    0.251    0.000    0.495    0.000 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMAPI.py:345(ScoutCircle)
+     5070    0.249    0.000    0.249    0.000 {built-in method nt.stat}
+   300264    0.245    0.000    0.370    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\util.py:286(is_module_function)
+   130000    0.243    0.000    0.373    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\utils.py:355(is_vectorized_observation)
+      160    0.237    0.001    1.664    0.010 D:\Work\personal\school\2021-2022\licenta\homm-like-env\HOMMBuildInAI_Procedural.py:223(ScoutAbout)
+   209280    0.234    0.000    2.718    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\stable_baselines3\common\buffers.py:123(to_torch)
+   395907    0.230    0.000    0.343    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\jsonpickle\util.py:223(is_dictionary_subclass)
+     2768    0.221    0.000    1.385    0.001 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\distributions\categorical.py:49(__init__)
+  1464746    0.219    0.000    0.219    0.000 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\numpy\lib\function_base.py:842(_copy_dispatcher)
+  1516293    0.215    0.000    0.215    0.000 {built-in method builtins.id}
+      320    0.213    0.001    1.140    0.004 C:\Users\mihai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\torch\distributions\categorical.py:123(entropy)
+   666541    0.213    0.000    0.599    0.000 {built-in method builtins.next}
+

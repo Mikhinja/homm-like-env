@@ -1,0 +1,157 @@
+UserWarning: This system does not have apparently enough memory to store the complete replay buffer 21.84GB > 2.00GB
+
+Using cpu device
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+<class 'stable_baselines3.dqn.dqn.DQN'> training...
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 400       |
+|    ep_rew_mean      | -5.85e+03 |
+|    exploration_rate | 0.24      |
+| time/               |           |
+|    episodes         | 4         |
+|    fps              | 38        |
+|    time_elapsed     | 41        |
+|    total_timesteps  | 1600      |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 400       |
+|    ep_rew_mean      | -6.24e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 8         |
+|    fps              | 39        |
+|    time_elapsed     | 81        |
+|    total_timesteps  | 3200      |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 400       |
+|    ep_rew_mean      | -6.21e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 12        |
+|    fps              | 39        |
+|    time_elapsed     | 122       |
+|    total_timesteps  | 4800      |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 375       |
+|    ep_rew_mean      | -5.58e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 16        |
+|    fps              | 38        |
+|    time_elapsed     | 154       |
+|    total_timesteps  | 6000      |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 372       |
+|    ep_rew_mean      | -5.74e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 20        |
+|    fps              | 39        |
+|    time_elapsed     | 189       |
+|    total_timesteps  | 7440      |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 369       |
+|    ep_rew_mean      | -5.87e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 24        |
+|    fps              | 39        |
+|    time_elapsed     | 225       |
+|    total_timesteps  | 8862      |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 363       |
+|    ep_rew_mean      | -5.83e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 28        |
+|    fps              | 39        |
+|    time_elapsed     | 258       |
+|    total_timesteps  | 10165     |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 356       |
+|    ep_rew_mean      | -5.74e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 32        |
+|    fps              | 39        |
+|    time_elapsed     | 287       |
+|    total_timesteps  | 11405     |
+-----------------------------------
+----------------------------------
+| rollout/            |          |
+|    ep_len_mean      | 349      |
+|    ep_rew_mean      | -5.7e+03 |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 36       |
+|    fps              | 39       |
+|    time_elapsed     | 314      |
+|    total_timesteps  | 12575    |
+----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 419       |
+|    ep_rew_mean      | -5.82e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 40        |
+|    fps              | 42        |
+|    time_elapsed     | 398       |
+|    total_timesteps  | 16745     |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 413       |
+|    ep_rew_mean      | -5.72e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 44        |
+|    fps              | 41        |
+|    time_elapsed     | 433       |
+|    total_timesteps  | 18162     |
+-----------------------------------
+-----------------------------------
+| rollout/            |           |
+|    ep_len_mean      | 412       |
+|    ep_rew_mean      | -5.82e+03 |
+|    exploration_rate | 0.05      |
+| time/               |           |
+|    episodes         | 48        |
+|    fps              | 41        |
+|    time_elapsed     | 474       |
+|    total_timesteps  | 19762     |
+-----------------------------------
+training done in  478.51s.
+evaluating...
+evaluated in  44.85s, mean_reward=-360.0, std_reward=40.0
+playing a game (at most 1000 steps)
+after 399 steps played in  24.96s: game.ended=True, day=1:2:4
+	 total-actions=568, P1-total-actions=410
+	 num-invalid-actions=400
+	 num-valid-actions=10, won=False, defeated=False, end-AIVal=2326
+[  39] day= 0 action: [P1] end turn None None None
+[  92] day= 1 action: [P1] end turn None None None
+[ 166] day= 2 action: [P1] end turn None None None
+[ 214] day= 3 action: [P1] end turn None None None
+[ 295] day= 4 action: [P1] end turn None None None
+[ 340] day= 5 action: [P1] end turn None None None
+[ 416] day= 6 action: [P1] end turn None None None
+[ 462] day= 7 action: [P1] end turn None None None
+[ 515] day= 8 action: [P1] end turn None None None
+[ 561] day= 9 action: [P1] end turn None None None
+(total time so far  552.555s)
