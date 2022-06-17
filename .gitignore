@@ -2,3 +2,5 @@ __pycache__
 .saved_temp
 .vscode
 trained_models/*
+env_dumps/*
+train_action_logs/*

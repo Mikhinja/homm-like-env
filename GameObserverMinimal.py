@@ -1,3 +1,4 @@
+from typing import OrderedDict
 from gym import Space, spaces
 from numpy import int16, int8
 from GameObserverSelectionFlat import GameObserverSelectedHeroTown
@@ -170,8 +171,8 @@ class GameObserverMinimalFlat(GameObserverMinimal):
 
 class GameObserverReallyMinimal(GameObserver):
     def __init__(self) -> None:
-        self.desc_dict = {}
-        self.obs_dict = {}
+        self.desc_dict = OrderedDict()
+        self.obs_dict = OrderedDict()
         self.max_AIVal = int(np.log2(3 * UnitUtils.GetAIValue(UnitUtils.GetUnitTypeByName('Archangel'))))
     
     def __hero_desc__(self, env:HOMMGymEnv, idx:int, own:bool=True):

@@ -444,11 +444,13 @@ class HardcodedTemplate(object):
         while not (path1 and path2 and path3) and attempts < 4:
             attempts += 1
             idx = env.rs.randint(0, len(walls_x))
+            env.map.fixed_obstacles.remove(walls_x[idx])
             guards.append(walls_x[idx])
             del walls_x[idx]
             if intersection and walls_y:
                 try:
                     idx = env.rs.randint(0, len(walls_y))
+                    env.map.fixed_obstacles.remove(walls_y[idx])
                     guards.append(walls_y[idx])
                     del walls_y[idx]
                 except:

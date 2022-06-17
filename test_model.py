@@ -16,26 +16,18 @@ cls()
 max_day = '1:3:2'
 
 allowed_actions_per_turn=50
-env = HOMMGymEnv.HOMMGymEnv(map_size='S-', max_day=max_day,
+env = HOMMGymEnv.HOMMGymEnv(map_size='T', max_day=max_day,
     allowed_actions_per_turn=allowed_actions_per_turn,
     p2_use_procedural_ai=True, p2_dummy_num=0,
     #observation_encoding='dict', action_mapper='big-flat'
     #observation_encoding='selection-flat', action_mapper='selection',
     # observation_encoding='minimal', action_mapper='minimal',
-    observation_encoding='really-minimal', action_mapper='only-move',
-    fixed_seed=202602822,
+    observation_encoding='really-minimal-flat', action_mapper='only-move',
+    fixed_seed=3231024768,
 )
 
-#'PPO turnmax_50 timesteps_50000 at 2022-06-10 23.44.53'
-#'DQN turnmax_50 timesteps_10000 at 2022-06-11 16.50.56'
-#'PPO turnmax_50 timesteps_30000 at 2022-06-11 19.11.33.zip'
-# 'DQN map-size_S-_27x27 turn-max_40 day-max_15 T-steps_20000 L-rate_0.5 fix-seed_3103147081 vsDummyAI trainT_1h.9m at 2022-06-13 16.21.38.zip'
-# 'DQN map-size_S-_27x27 turn-max_40 day-max_15 T-steps_20000 L-rate_0.2 fix-seed_849698169 vsDummyAI trainT_1h.2m at 2022-06-13 17.41.36.zip'
-# 'DQN map-size_S-_27x27 turn-max_40 day-max_15 T-steps_5000 L-rate_0.2 fix-seed_1220620616 vsDummyAI trainT_0h.15m at 2022-06-13 19.59.59.zip'
-# 'DQN map-size_S-_27x27 turn-max_40 day-max_15 T-steps_10000 L-rate_0.1 fix-seed_1667361835 vsDummyAI trainT_0h.30m at 2022-06-14 14.25.51.zip'
-# 'DQN map-size_S-_27x27 turn-max_40 day-max_15 T-steps_80000 L-rate_0.2 fix-seed_3283905031 vsDummyAI trainT_0h.55m at 2022-06-14 18.43.04.zip'
-# 'PPO map-size=27x27 turn-max_40 day-max=15 T-steps=30000 L-rate=0.2 fix-seed=474806171 minimal_vsDummyAI trainT=0h.52m at 2022-06-15 15.01.07.zip'
-saved_name = 'DQN map-size=27x27 turn-max_30 day-max=15 T-steps=100000 L-rate=0.05 fix-seed=202602822 minimal_vsDummyAI trainT=0h.7m at 2022-06-16 17.50.49.zip'
+
+saved_name = 'DQN map=19x19 turn-max_30 day-max=15 steps=60000 L-rate=0.05 seed=3231024768 minimal_vsDummyAI_inverseReward trainT=0h.2m at 2022-06-16 23.20.11.zip'
 print(f'loading model "{saved_name}" ...')
 model = DQN.load('trained_models\\'+saved_name, env=env)
 # model = DQN.load('trained_models\\'+saved_name, env=env)

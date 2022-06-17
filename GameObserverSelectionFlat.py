@@ -1,3 +1,4 @@
+from typing import OrderedDict
 from gym import Space, spaces
 from numpy import int16, int8
 from HOMMGymEnv import HOMMGymEnv, GameObserver, GameActionMapper
@@ -20,8 +21,8 @@ class GameObserverSelectedHeroTown(GameObserver):
         self.total_buildings_num = len(self.buildings_list)
         # self.sel_hero_idx = 1 # starting hero
         # self.sel_town_idx = 1 # starting town
-        self.desc_dict = {}
-        self.obs_dict = {}
+        self.desc_dict = OrderedDict()
+        self.obs_dict = OrderedDict()
         self.__last_active_player_idx = 0
 
     def __hero_desc__(self, env:HOMMGymEnv, idx:int, own:bool=True):

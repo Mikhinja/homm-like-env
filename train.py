@@ -21,7 +21,7 @@ fixed_seed = randint(0, 1<<32) # None # randint(0, 1<<32)
 map_size = 'T'
 max_day = '1:3:2'
 
-extra_desc = 'minimal_vsDummyAI_inverseReward'
+extra_desc = 'minimal_vsDummyAI'
 
 env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     max_day=max_day,
@@ -32,15 +32,15 @@ env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     # observation_encoding='selection-flat', action_mapper='selection-reduced',
     # observation_encoding='minimal', action_mapper='minimal',
     # observation_encoding='minimal', action_mapper='only-move',
-    observation_encoding='really-minimal', action_mapper='only-move',
+    observation_encoding='really-minimal-flat', action_mapper='only-move',
     fixed_seed=fixed_seed
 )
 
 # MlpPolicy -- does not support dict as observation space
 # model = PPO('MultiInputPolicy', env, verbose=1)
-learning_rate = 5e-3
+learning_rate = 5e-1
 buffer_size = 50_000 # de facut mai mare (mult mai mare decat 700)!
-exploration_fraction = 0.5
+exploration_fraction = 0.2
 
 # TODO: redus spatiul actiunilor ~15
 
@@ -50,19 +50,19 @@ exploration_fraction = 0.5
 # )
 
 ### MultiInputPolicy  MlpPolicy
-model = DQN('MultiInputPolicy', env, verbose=1,
+model = DQN('MlpPolicy', env, verbose=1,
     buffer_size=buffer_size,
     learning_rate=learning_rate,
     tau=0.9,
-    #gamma=0.95,
-    learning_starts=5000,
+    gamma=0.95,
+    learning_starts=1000,
     exploration_fraction=exploration_fraction,
     #exploration_final_eps=0.1,
     #train_freq=(allowed_actions_per_turn//10, 'step')
     train_freq=(50, 'step') # 50 - 100
 )
 
-total_timesteps=int(60_000)
+total_timesteps=int(50_000)
 print(f'{type(model)}\n  {extra_desc}'
 f' training total_timesteps={total_timesteps}, learning-rate={learning_rate}'
 f' map-size_{map_size}_{env.game.map.size[0]}x{env.game.map.size[1]}, fixed_seed={fixed_seed},'
@@ -75,12 +75,12 @@ except KeyboardInterrupt:
     print(f'interupted after {env.TRAIN_STEP}')
 except Exception as ex:
     if env:
-        with open('env_dump.json', 'w') as f:
+        with open('env_dumps\\env_dump.json', 'w') as f:
             f.write(env.game.SaveState())
     raise
 curr_time = time()-start
 
-print(f'training done in {curr_time:> 5.2f}s.')
+print(f'training done in {curr_time:> 5.2f}s. exploration_fraction={exploration_fraction}')
 
 time_stamp = str(datetime.today())
 time_stamp = time_stamp[:time_stamp.index('.')].replace(':', '.')
@@ -96,12 +96,12 @@ print(f'actions that won: {", ".join([str(a) for a in HOMMGymEnv.HOMMGymEnv.ACTI
 
 
 if fixed_seed:
-    env_dump_file = f'env_seed={fixed_seed}_dump.json'
+    env_dump_file = f'env_dumps\\env_seed={fixed_seed}_dump.json'
     with open(env_dump_file, 'w') as f:
             f.write(env.game.SaveState())
     print(f'\nsaved env as {env_dump_file}')
 
-with open(f'action_rewards_seed={fixed_seed}.txt', 'w') as f:
+with open(f'train_action_logs\\action_rewards_seed={fixed_seed}.txt', 'w') as f:
     print(f'{model.__class__.__name__}, fix-seed={fixed_seed} {extra_desc}, L-rate_{learning_rate}', file=f)
     print(f'train time={int(curr_time//3600)}h.{int((curr_time % 3600)//60)}m, at {time_stamp}', file=f)
     print(f'saved as {saved_name}', file=f)
