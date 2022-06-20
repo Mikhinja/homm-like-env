@@ -93,7 +93,7 @@ class AutoCombatAI(HOMMAutoCombatAI):
             return BattleAction.Shoot(target_stack.x, target_stack.y)
         else:
             # TODO: implement pathing for flying movement!
-            next_pos = battlefield.GetClosestToTarget(currStack, target_stack)
+            next_pos = battlefield.GetClosestToTarget(currStack, target_stack, otherHero=otherArmy.hero)
             if next_pos:
                 if battlefield.AreNeighbors(next_pos, (target_stack.x, target_stack.y)):
                     return BattleAction.MoveAttack(*next_pos, target_stack.x, target_stack.y)

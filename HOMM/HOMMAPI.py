@@ -426,16 +426,20 @@ class HOMMArmyStackInCombat(object):
         #self.morale = 0 # TODO: get this based on hero attrib
     def GetAIVal(self) -> int:
         return self.curr_num * UnitUtils.GetAIValue(self.stack.unit_type)
-    def GetUnitSpeed(self):
+    def GetUnitSpeed(self, otherHero:HOMMHero):
         speed = self.stack.GetUnitSpeed()
         speed += self.hero.GetBonus('speed') if self.hero else 0
         # spell modifiers
-        if HeroSpellUtils.GetSpellId('haste') in self.active_spells:
+        if self.active_spells[HeroSpellUtils.GetSpellId('haste')] > 0:
             speed += self.hero.GetSpellValue(HeroSpellUtils.GetSpellId('haste'))
-        if HeroSpellUtils.GetSpellId('prayer') in self.active_spells:
+        if self.active_spells[HeroSpellUtils.GetSpellId('prayer')] > 0:
             speed += self.hero.GetSpellValue(HeroSpellUtils.GetSpellId('prayer'))
-        if HeroSpellUtils.GetSpellId('slow') in self.active_spells:
-            speed *= 1 - self.hero.GetSpellValue(HeroSpellUtils.GetSpellId('slow'))
+        if self.active_spells[HeroSpellUtils.GetSpellId('slow')] > 0:
+            if otherHero:
+                val = otherHero.GetSpellValue(HeroSpellUtils.GetSpellId('slow'))
+            else:
+                val = HeroSpells[HeroSpellUtils.GetSpellId('slow')][1]
+            speed *= 1 - val
         return speed
     
     def TakeDamage(self, damage:int):
@@ -510,7 +514,7 @@ class HOMMBattlefield(object):
     #     pass
     def StackPathTo(self, stack:HOMMArmyStackInCombat, dest:HOMMArmyStackInCombat) -> list:
         pass
-    def GetClosestToTarget(self, stack:HOMMArmyStackInCombat, dest:HOMMArmyStackInCombat) -> tuple[int, int]:
+    def GetClosestToTarget(self, stack:HOMMArmyStackInCombat, dest:HOMMArmyStackInCombat, otherHero:HOMMHero) -> tuple[int, int]:
         pass
     def AreNeighbors(self, source:tuple[int,int], dest:tuple[int,int]) -> bool:
         pass

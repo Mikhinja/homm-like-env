@@ -1,5 +1,5 @@
 import math
-from HOMM.HOMMAPI import HOMMArmy, HOMMArmyInCombat, HOMMArmyStackInCombat, HOMMBattlefield
+from HOMM.HOMMAPI import HOMMArmy, HOMMArmyInCombat, HOMMArmyStackInCombat, HOMMBattlefield, HOMMHero
 
 from HOMM.Hero import Hero
 
@@ -19,8 +19,8 @@ class Battlefield(HOMMBattlefield):
         return ret
     def StackPathTo(self, stack:HOMMArmyStackInCombat, dest:tuple[int,int]) -> list:
         return [Battlefield.CubeToEvenR(*pos) for pos in self.FindPathTo_impl(stack.x, stack.y, *dest, self.__get_obstacles__(dest))]
-    def GetClosestToTarget(self, stack:HOMMArmyStackInCombat, dest:HOMMArmyStackInCombat) -> tuple[int, int]:
-        return self.GetClosestToTarget_old(stack.x, stack.y, dest.x, dest.y, self.__get_obstacles__((dest.x, dest.y)), stack.GetUnitSpeed())
+    def GetClosestToTarget(self, stack:HOMMArmyStackInCombat, dest:HOMMArmyStackInCombat, otherHero:HOMMHero) -> tuple[int, int]:
+        return self.GetClosestToTarget_old(stack.x, stack.y, dest.x, dest.y, self.__get_obstacles__((dest.x, dest.y)), stack.GetUnitSpeed(otherHero))
     def AreNeighbors(self, source:tuple[int,int], dest:tuple[int,int]) -> bool:
         return self.AreNeighborsCube(*self.EvenRToCube(*source), *self.EvenRToCube(*dest))
     

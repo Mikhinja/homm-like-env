@@ -146,12 +146,13 @@ class ProceduralAI(HOMMAI):
         if len(self.player.towns) > 0 and self.player.resources[0] > 500:
             for idx, town in enumerate(self.player.towns):
                 ttown:TownBase = town
-                x = next(((idx+1, num) for idx, num in enumerate(ttown.creature_bank) if num > 0), None)
-                if x:
-                    lvl, num = x
+                stack_idx, num = next(((idx, num) for idx, num in enumerate(ttown.creature_bank) if num > 0), (None, None))
+                if stack_idx and num:
                     # TODO: implement proper unit upgrades
-                    unit_id = next(unit_id for unit_id in TownTypes[ttown.faction]['Units'] if UnitUtils.GetUnitLevel(unit_id)==lvl)
-                    return ActionRecruitArmy(town_idx=idx, unit_type=unit_id, amount=num)
+                    # lvl, num = x
+                    # unit_id = next(unit_id for unit_id in TownTypes[ttown.faction]['Units'] if UnitUtils.GetUnitLevel(unit_id)==lvl)
+                    # return ActionRecruitArmy(town_idx=idx, unit_type=unit_id, amount=num)
+                    return ActionRecruitArmy(town_idx=idx, unit_type=stack_idx, amount=num)
         return None
     
     def SeekHeroBattle(self) -> HOMMAction:

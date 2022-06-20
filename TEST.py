@@ -306,7 +306,7 @@ if test_with_cache:
     actions/game = {(sum_actions/(num_games)):>6.2f}, invalid actions/game = {(sum_invalid_actions/(num_games)):>4.2f}""")
 
 #input('press any key')
-run_in_cmd=False
+run_in_cmd=True
 if run_in_cmd:
     TEST_Hardcoded_Template_Env(render=run_in_cmd)
 

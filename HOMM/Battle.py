@@ -124,8 +124,8 @@ class Battle(HOMMBattle):
         return False
 
     def RefreshStackOrder(self):
-        self.armyA.army.sort(key=lambda stack: stack.GetUnitSpeed(), reverse=True)
-        self.armyD.army.sort(key=lambda stack: stack.GetUnitSpeed(), reverse=True)
+        self.armyA.army.sort(key=lambda stack: stack.GetUnitSpeed(self.armyD.hero), reverse=True)
+        self.armyD.army.sort(key=lambda stack: stack.GetUnitSpeed(self.armyA.hero), reverse=True)
     
     def DoAction(self, action:BattleAction) -> bool:
         assert(action and not self.IsBattleOver())
@@ -190,8 +190,9 @@ class Battle(HOMMBattle):
                 if action.dest == (self.curr_stack.x, self.curr_stack.y):
                     action.end_pos = action.dest
                 else:
+                    otherHero = self.armyD.hero if self.attacker_action else self.armyA.hero
                     path = self.battlefield.StackPathTo(self.curr_stack, action.dest)
-                    dist = self.curr_stack.GetUnitSpeed()
+                    dist = self.curr_stack.GetUnitSpeed(otherHero)
                     obstacles = self.battlefield.__get_obstacles__()
                     if UnitUtils.IsFlying(self.curr_stack.stack.unit_type):
                         idx = min(dist, len(path))-1
@@ -231,7 +232,7 @@ class Battle(HOMMBattle):
         next_defending_stack:HOMMArmyStackInCombat = next((stack for stack in self.armyD if stack.prev_round < self.curr_round and stack.curr_num), None)
         if next_attacking_stack:
             if next_defending_stack:
-                if next_defending_stack.GetUnitSpeed() > next_attacking_stack.GetUnitSpeed():
+                if next_defending_stack.GetUnitSpeed(self.armyA.hero) > next_attacking_stack.GetUnitSpeed(self.armyD.hero):
                     # defending army has faster stack
                     self.curr_stack = next_defending_stack
                     self.attacker_action = False
