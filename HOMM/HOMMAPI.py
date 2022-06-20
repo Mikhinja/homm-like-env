@@ -829,7 +829,7 @@ class HOMMMap(object):
             key = (hero.player_idx, hero.x, hero.y)
             self.__gScoresCache[key] = gScores
             self.__came_from_cache[key] = came_from
-    def __get_cached_gScores__(self, hero:HOMMHero) -> tuple[dict, dict] | tuple[None, None]:
+    def __get_cached_gScores__(self, hero:HOMMHero) :#-> tuple[dict, dict] | tuple[None, None]:
         key = (hero.player_idx, hero.x, hero.y)
         if key in self.__gScoresCache:
             return self.__gScoresCache[key], self.__came_from_cache[key]

@@ -4,8 +4,9 @@ from gym.utils import seeding
 
 class DiscreteMasked(spaces.Discrete):
     SAMPLED:bool=False
-    def __init__(self, n: int, seed: Optional[int | seeding.RandomNumberGenerator] = None, start: int = 0):
-        super().__init__(n, seed, start)
+    def __init__(self, n: int, seed = None, start: int = 0):
+        #super().__init__(n, seed, start)
+        super().__init__(n) # for py 3.9
         self.mask = None
     def sample(self) -> int:
         if self.__has_mask__():

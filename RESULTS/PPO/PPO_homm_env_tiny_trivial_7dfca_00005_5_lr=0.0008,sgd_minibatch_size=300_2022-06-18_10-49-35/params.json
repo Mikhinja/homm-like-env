@@ -1,0 +1,11 @@
+{
+  "eager_tracing": false,
+  "env": "homm_env_tiny_trivial",
+  "framework": "tf2",
+  "gamma": 0.99,
+  "horizon": 450,
+  "kl_coeff": 1.0,
+  "lr": 0.0008,
+  "num_workers": 16,
+  "sgd_minibatch_size": 300
+}

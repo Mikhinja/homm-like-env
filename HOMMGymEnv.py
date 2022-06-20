@@ -1,6 +1,5 @@
 from typing import Callable, Optional, Union
 from gym import Env, Space, spaces
-from pyparsing import dictOf
 import numpy as np
 
 from HOMM.HOMMAPI import HOMMAI, HOMMAction, HOMMArmy, HOMMArmyStack, HOMMHero, HOMMMap, HOMMPlayer
@@ -52,7 +51,7 @@ class GameObserver(object):
 class GameActionMapper(object):
     def GetActionSpace(self, env) -> Space:
         pass
-    def UnmapAction(self, env, action) -> HOMMAction|list[HOMMAction]:
+    def UnmapAction(self, env, action) :#-> HOMMAction|list[HOMMAction]:
         pass
     def GetValidActionsMask(self, env):
         pass
@@ -74,10 +73,15 @@ class GameActionMapper(object):
             from GameObserverMinimal import GameActionMapperOnlyMoveHero
             return GameActionMapperOnlyMoveHero(env)
 
+# class MySpec:
+#     def __init__(self, max_episode_steps:int) -> None:
+#         self.id = 'homm-like-env'
+#         self.max_episode_steps = max_episode_steps
+
 class HOMMGymEnv(Env):
-    WIN_LOSS_REWARD = 10_000 # is this too high?
+    WIN_LOSS_REWARD = 1000 # is this too high?
     REWARD_PER_HERO_LEVEL = 3 # is this a good idea?
-    INVALID_ACTION_REWARD = -1
+    INVALID_ACTION_REWARD = -2
     UNACCEPTABLE_ACTION_REWARD_INCREMENT = -10 # should this be flat, or increment?
 
     # for debugging
@@ -116,6 +120,7 @@ class HOMMGymEnv(Env):
         
         # add built-in AI, if any
         self.__set_procedural_ai__()
+        # self.spec = MySpec((self.game.max_day * allowed_actions_per_turn) + 1) # is this ok?
 
         # Start() will bring the game into a state where an action from the agent is expected
         self.game.Start()
@@ -299,7 +304,7 @@ class HOMMGymEnv(Env):
     
     def __compute_reward__(self, action_was_accepted:bool=True,
             action_was_valid:bool=True,
-            action_was_end_turn:bool=False) -> float:
+            action_was_end_turn:bool=False) -> np.float32:
         # TODO: refactor this to work for all players (for self-play)
         assert self.ML_player_idx == self.game.map.curr_player_idx or self.game.ended or self.game.map.hero_leveling_up
         reward = 0
@@ -346,4 +351,4 @@ class HOMMGymEnv(Env):
         #reward += self.INVALID_ACTION_REWARD # is this a good idea?
         
         self.total_rewards[self.ML_player_idx] += reward
-        return reward
+        return np.float32(reward)

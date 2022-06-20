@@ -4,7 +4,6 @@
 #from fileinput import filename
 from sqlite3 import Timestamp
 import threading
-from turtle import back
 from PIL import ImageGrab, Image
 import win32gui
 
