@@ -323,8 +323,11 @@ class HOMMGymEnv(Env):
             curr_SumHeroLevels = [sum(h.GetLevel() for h in self.game.map.players[0].heroes), sum(h.GetLevel() for h in self.game.map.players[1].heroes)]
             reward += self.REWARD_PER_HERO_LEVEL * (curr_SumHeroLevels[self.game.map.curr_player_idx] - self.prev_SumHeroLevels[self.game.map.curr_player_idx])
             curr_sum_res = self.__sum_resources__(self.game.map.players[0].resources)
+            curr_sum_res /= 10 # should be less than army value, always
             if not action_was_end_turn:
-                reward += self.__log__(curr_sum_res - self.prev_SumResources[0])
+                res_diff = curr_sum_res - self.prev_SumResources[0]
+                if res_diff > 0: # is it ok to only consider resource gains, not spending?
+                    reward += self.__log__(curr_sum_res - self.prev_SumResources[0])
 
             if self.game.ended:
                 if player.IsDefeated():

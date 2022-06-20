@@ -17,9 +17,10 @@ from GymExtensions import DiscreteMasked
 import numpy as np
 
 class GameObserverMinimal(GameObserverSelectedHeroTown):
+    BUILDINGS_LIST = ['Capitol', 'Monastery', 'Portal of Glory']
     def __init__(self) -> None:
         super().__init__()
-        self.buildings_list = ['Capitol', 'Monastery', 'Portal of Glory']
+        self.buildings_list = GameObserverMinimal.BUILDINGS_LIST
         self.total_buildings = len(self.buildings_list)
 
     def __town_desc__(self, env:HOMMGymEnv, idx:int, player_idx:int=0):
@@ -254,7 +255,9 @@ class GameObserverReallyMinimal(GameObserver):
         self.obs_dict[f'{key_base}-x'] = town.x if can_see else 0
         self.obs_dict[f'{key_base}-y'] = town.y if can_see else 0
         self.obs_dict[f'{key_base}-owner'] = 1 + town.player_idx if can_see else 0
-        self.obs_dict[f'{key_base}-armyStr'] = min(self.max_AIVal,int(np.log2(town.army.GetAIVal()))) if can_see and town.army else 0
+        self.obs_dict[f'{key_base}-armyStr'] = min(self.max_AIVal,
+            int(np.log2(town.army.GetAIVal()))
+        ) if can_see and town.army and town.army.GetAIVal()>0 else 0
     
     def __neutral_obs__(self, env:HOMMGymEnv, neutral_idx:int, player_idx:int=0) -> list:
         key_base = f'neutral{neutral_idx+1}'
@@ -312,11 +315,11 @@ class GameActionMapperMinimal(GameActionMapper):
         (+1,-1), (+1, 0), (+1,+1),
     ]
     def __init__(self, env:HOMMGymEnv) -> None:
-        assert isinstance(env.observer, GameObserverMinimal)
+        #assert isinstance(env.observer, GameObserverMinimal) # is it ok to skip this?
         obs_minimal:GameObserverMinimal = env.observer
         self.map_size = env.game.map.size
         env.game.autoskill_existing[env.ML_player_idx] = True
-        self.buildings_list = obs_minimal.buildings_list
+        self.buildings_list = obs_minimal.buildings_list if isinstance(obs_minimal, GameObserverMinimal) else GameObserverMinimal.BUILDINGS_LIST
 
         self.total_actions_num = 0
 
@@ -339,8 +342,8 @@ class GameActionMapperMinimal(GameActionMapper):
     
     def GetValidActionsMask(self, env:HOMMGymEnv):
         env.game.autoskill_existing[env.ML_player_idx] = True # need to do this again due to successive reset()
-        mask = np.ones(shape=(self.total_actions_num), dtype=bool)
         player = env.game.map.players[env.game.map.curr_player_idx]
+        mask = np.ones(shape=(self.total_actions_num), dtype=bool)
         if len(player.heroes) == 0:
             mask[self.action_move_hero_start:self.action_move_hero_end+1] = False
         else:

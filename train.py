@@ -16,12 +16,12 @@ allowed_actions_per_turn=30
 start_start = time()
 
 # set this to some number to fix the map, None for randomly generated maps
-fixed_seed = randint(0, 1<<32) # None # randint(0, 1<<32)
+fixed_seed = None # None # randint(0, 1<<32)
 # map sizes: T=19x19, S-=27x27, S=36x36, S+=36x56, M=72x72, L=108x108, XL= 144x144, H=180x180, XH=216x216, G=252x252
 map_size = 'T'
 max_day = '1:3:2'
 
-extra_desc = 'minimal_vsDummyAI'
+extra_desc = 'minimal-ish_vsDummyAI'
 
 env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     max_day=max_day,
@@ -32,37 +32,43 @@ env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     # observation_encoding='selection-flat', action_mapper='selection-reduced',
     # observation_encoding='minimal', action_mapper='minimal',
     # observation_encoding='minimal', action_mapper='only-move',
-    observation_encoding='really-minimal-flat', action_mapper='only-move',
+    observation_encoding='really-minimal-flat', action_mapper='minimal',
     fixed_seed=fixed_seed
 )
 
 # MlpPolicy -- does not support dict as observation space
 # model = PPO('MultiInputPolicy', env, verbose=1)
-learning_rate = 5e-1
+learning_rate = 1e-3
 buffer_size = 50_000 # de facut mai mare (mult mai mare decat 700)!
 exploration_fraction = 0.2
 
 # TODO: redus spatiul actiunilor ~15
 
 ### MultiInputPolicy  MlpPolicy
-# model = PPO('MlpPolicy', env=env, verbose=1,
-#     learning_rate=learning_rate,
-# )
-
-### MultiInputPolicy  MlpPolicy
-model = DQN('MlpPolicy', env, verbose=1,
-    buffer_size=buffer_size,
+model = PPO('MlpPolicy', env=env, verbose=1,
     learning_rate=learning_rate,
-    tau=0.9,
-    gamma=0.95,
-    learning_starts=1000,
-    exploration_fraction=exploration_fraction,
-    #exploration_final_eps=0.1,
-    #train_freq=(allowed_actions_per_turn//10, 'step')
-    train_freq=(50, 'step') # 50 - 100
+    batch_size=240, # 300?
+    n_steps=10*240, # make this bigger, a multiple of batch_size
+    gamma=0.99,
+    #n_epochs=env.game.max_day, # is this ok, to have an entire game?
+    
 )
 
-total_timesteps=int(50_000)
+### MultiInputPolicy  MlpPolicy
+# model = DQN('MlpPolicy', env, verbose=1,
+#     buffer_size=buffer_size,
+#     learning_rate=learning_rate,
+#     #tau=0.9,
+#     gamma=0.99,
+#     learning_starts=1000,
+#     exploration_fraction=exploration_fraction,
+#     #exploration_final_eps=0.1,
+#     #train_freq=(allowed_actions_per_turn//10, 'step')
+#     train_freq=(50, 'step'), # 50 - 100
+#     batch_size=300 # to also try up to 450
+# )
+
+total_timesteps=int(100_000)
 print(f'{type(model)}\n  {extra_desc}'
 f' training total_timesteps={total_timesteps}, learning-rate={learning_rate}'
 f' map-size_{map_size}_{env.game.map.size[0]}x{env.game.map.size[1]}, fixed_seed={fixed_seed},'

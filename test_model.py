@@ -22,12 +22,14 @@ env = HOMMGymEnv.HOMMGymEnv(map_size='T', max_day=max_day,
     #observation_encoding='dict', action_mapper='big-flat'
     #observation_encoding='selection-flat', action_mapper='selection',
     # observation_encoding='minimal', action_mapper='minimal',
-    observation_encoding='really-minimal-flat', action_mapper='only-move',
-    fixed_seed=3231024768,
+    # observation_encoding='really-minimal-flat', action_mapper='only-move',
+    observation_encoding='really-minimal-flat', action_mapper='minimal',
+    fixed_seed=None,
 )
 
-
-saved_name = 'DQN map=19x19 turn-max_30 day-max=15 steps=60000 L-rate=0.05 seed=3231024768 minimal_vsDummyAI_inverseReward trainT=0h.2m at 2022-06-16 23.20.11.zip'
+#'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=44793690 minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-17 23.48.18.zip'
+# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=1024681898 minimal-ish_vsDummyAI trainT=0h.23m at 2022-06-18 00.25.37.zip'
+saved_name = 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-18 00.58.01.zip'
 print(f'loading model "{saved_name}" ...')
 model = DQN.load('trained_models\\'+saved_name, env=env)
 # model = DQN.load('trained_models\\'+saved_name, env=env)
@@ -39,6 +41,10 @@ print(f'playing a game (at most {max_steps} steps)')
 start = time()
 
 obs = env.reset()
+env.game.SetRenderer('colortext')
+renderer:HOMMColorTextConsoleRender = env.game.renderer
+renderer.print_battles = False
+renderer.interactive_play = True
 for i in range(max_steps):
     action, _states = model.predict(obs, deterministic=True)
     obs, rewards, dones, info = env.step(action=action)
@@ -59,14 +65,18 @@ print(f'after {i} steps played in {curr_time:> 5.2f}s: game.ended={env.game.ende
 #     if a.player_idx == env.ML_player_idx and a.is_valid and type(a) != BattleAction and not a.is_forced:
 #         print(f'[{idx:> 5}] day={a.day:> 2} action: {str(a)}')
 
-print('rendering...\n')
+# print('rendering...\n')
+input('press any key, to render...')
+if renderer:
+    renderer.__init_image_capture__()
+    renderer.Playback()
 
-env.game.SetRenderer('colortext')
-renderer:HOMMColorTextConsoleRender = env.game.renderer
-renderer.print_battles = False
-renderer.__init_console_render__()
-snapshot = renderer.__print_all__()
-snapshot = renderer.__print_map__() + '\n' + snapshot
+# env.game.SetRenderer('colortext')
+# renderer:HOMMColorTextConsoleRender = env.game.renderer
+# renderer.print_battles = False
+# renderer.__init_console_render__()
+# snapshot = renderer.__print_all__()
+# snapshot = renderer.__print_map__() + '\n' + snapshot
 
-sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (31, 1, snapshot))
-sys.stdout.flush()
+# sys.stdout.write("\x1b7\x1b[%d;%df%s\x1b8" % (31, 1, snapshot))
+# sys.stdout.flush()
