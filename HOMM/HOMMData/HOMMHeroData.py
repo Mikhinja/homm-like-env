@@ -889,7 +889,7 @@ HeroDefinitions = {
     #       unit type, min, max
     #   )
     # TODO: add hero specializations, 
-    'Mig Off Arm':    ('Knight',  1,  2,  [(1, 10, 20), (1, 10, 20), (5,  2,  3)]),
+    'Mig Off Arm':    ('Knight',  1,  2,  [(1, 25, 45), (3,  9, 14), (5,  3,  5)]), # enhanced to make it easier for agent
     'Mig Arc Arm':    ('Knight',  0,  2,  [(3,  4,  7), (3,  4,  7), (5,  2,  3)]),
     'Mig Off Res':    ('Knight',  1,  9,  [(1, 10, 20), (3,  4,  7), (5,  2,  3)]),
     'Mig Arc Res':    ('Knight',  0,  9,  [(3,  4,  7), (3,  4,  7), (3,  4,  7)]),

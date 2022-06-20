@@ -340,8 +340,8 @@ class HardcodedTemplate(object):
         # give starting heroes
         assert len(env.map.heroes) > 1, 'Error: not enough heroes defined for 2 players!'
         num_all_heroes = len(env.map.heroes)
-        h1 = env.map.heroes[env.rs.choice(list(range(num_all_heroes)))]
-        h2 = env.map.heroes[env.rs.choice(list(range(num_all_heroes)))]
+        h1 = env.map.heroes[0] #env.map.heroes[env.rs.choice(list(range(num_all_heroes)))]
+        h2 = env.map.heroes[1] #env.map.heroes[env.rs.choice(list(range(num_all_heroes)))]
         while h2 == h1:
             h2 = env.map.heroes[env.rs.choice(list(range(num_all_heroes)))]
         ok  = env.map.GiveHeroTo(h1, env.map.players[0], start_pos_1)
@@ -360,12 +360,13 @@ class HardcodedTemplate(object):
             deviations_x.append((env.rs.choice([-1, 1]), env.rs.randint(0, size_y)))
         deviations_x.sort(key=lambda t: t[1])
         obstacle_wall = TileTypesByName['wall']
+        free_tile = TileTypesByName['free']
 
         ret_areas = [((0,size_x-1), (0,size_y-1))]
 
         guards = []
         walls = []
-        walls_x = walls_y = None
+        walls_x = walls_y = intersection = None
 
         if self.areas in [2, 4]:
             walls_x = [(half_x, y) for y in range(size_y)]
@@ -445,12 +446,16 @@ class HardcodedTemplate(object):
             attempts += 1
             idx = env.rs.randint(0, len(walls_x))
             env.map.fixed_obstacles.remove(walls_x[idx])
+            x,y = walls_x[idx]
+            env.map.tiles[0,x,y] = free_tile
             guards.append(walls_x[idx])
             del walls_x[idx]
             if intersection and walls_y:
                 try:
                     idx = env.rs.randint(0, len(walls_y))
                     env.map.fixed_obstacles.remove(walls_y[idx])
+                    x,y = walls_y[idx]
+                    env.map.tiles[0,x,y] = free_tile
                     guards.append(walls_y[idx])
                     del walls_y[idx]
                 except:

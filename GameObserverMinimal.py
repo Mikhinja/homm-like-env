@@ -372,7 +372,7 @@ class GameActionMapperMinimal(GameActionMapper):
         discreteMasked.UpdateMask(mask)
         return mask
 
-    def UnmapAction(self, env:HOMMGymEnv, action) -> HOMMAction|list[HOMMAction]:
+    def UnmapAction(self, env:HOMMGymEnv, action) :#-> HOMMAction|list[HOMMAction]:
         obs:GameObserverMinimal = env.observer
         player = env.game.map.players[env.game.map.curr_player_idx] if not env.game.map.hero_leveling_up else env.game.map.players[env.game.map.hero_leveling_up.player_idx]
         assert obs
@@ -454,7 +454,7 @@ class GameActionMapperOnlyMoveHero(GameActionMapper):
         discreteMasked.UpdateMask(mask)
         return mask
     
-    def UnmapAction(self, env:HOMMGymEnv, action) -> HOMMAction|list[HOMMAction]:
+    def UnmapAction(self, env:HOMMGymEnv, action) :#-> HOMMAction|list[HOMMAction]:
         # obs:GameObserverMinimal = env.observer
         # assert obs
         was_sampled = DiscreteMasked.SAMPLED
