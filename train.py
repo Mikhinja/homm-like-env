@@ -26,7 +26,7 @@ extra_desc = 'minimal-ish_vsDummyAI'
 env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     max_day=max_day,
     allowed_actions_per_turn=allowed_actions_per_turn,
-    p2_use_procedural_ai=True, p2_dummy_num=0,
+    p2_use_procedural_ai=True, p2_dummy_num=1,
     #observation_encoding='dict', action_mapper='big-flat'
     #observation_encoding='selection-flat', action_mapper='selection',
     # observation_encoding='selection-flat', action_mapper='selection-reduced',
@@ -40,33 +40,33 @@ env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
 # model = PPO('MultiInputPolicy', env, verbose=1)
 learning_rate = 1e-3
 buffer_size = 50_000 # de facut mai mare (mult mai mare decat 700)!
-exploration_fraction = 0.2
+exploration_fraction = 0.3
 
 # TODO: redus spatiul actiunilor ~15
 
 ### MultiInputPolicy  MlpPolicy
-model = PPO('MlpPolicy', env=env, verbose=1,
-    learning_rate=learning_rate,
-    batch_size=240, # 300?
-    n_steps=10*240, # make this bigger, a multiple of batch_size
-    gamma=0.99,
-    #n_epochs=env.game.max_day, # is this ok, to have an entire game?
+# model = PPO('MlpPolicy', env=env, verbose=1,
+#     learning_rate=learning_rate,
+#     batch_size=240, # 300?
+#     n_steps=10*240, # make this bigger, a multiple of batch_size
+#     gamma=0.99,
+#     #n_epochs=env.game.max_day, # is this ok, to have an entire game?
     
-)
+# )
 
 ### MultiInputPolicy  MlpPolicy
-# model = DQN('MlpPolicy', env, verbose=1,
-#     buffer_size=buffer_size,
-#     learning_rate=learning_rate,
-#     #tau=0.9,
-#     gamma=0.99,
-#     learning_starts=1000,
-#     exploration_fraction=exploration_fraction,
-#     #exploration_final_eps=0.1,
-#     #train_freq=(allowed_actions_per_turn//10, 'step')
-#     train_freq=(50, 'step'), # 50 - 100
-#     batch_size=300 # to also try up to 450
-# )
+model = DQN('MlpPolicy', env, verbose=1,
+    buffer_size=buffer_size,
+    learning_rate=learning_rate,
+    #tau=0.9,
+    gamma=0.99,
+    learning_starts=1000,
+    exploration_fraction=exploration_fraction,
+    #exploration_final_eps=0.1,
+    #train_freq=(allowed_actions_per_turn//10, 'step')
+    train_freq=(50, 'step'), # 50 - 100
+    batch_size=300 # to also try up to 450
+)
 
 total_timesteps=int(100_000)
 print(f'{type(model)}\n  {extra_desc}'

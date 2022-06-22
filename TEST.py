@@ -238,72 +238,73 @@ def active_window_process_name():
 curr_proc_name = active_window_process_name()
 run_in_cmd = 'cmd.exe' in curr_proc_name.lower()
 
-num_games = 1
+num_games = 0
 
-seeds = [random.randint(0, 2**31) for _ in range(num_games)]
+if num_games:
+    seeds = [random.randint(0, 2**31) for _ in range(num_games)]
 
-sum_time = 0
-sum_actions = 0
-sum_invalid_actions = 0
-replay = True
-print(f'replay={replay} ({"run twice and compare" if replay else "run just once"})')
+    sum_time = 0
+    sum_actions = 0
+    sum_invalid_actions = 0
+    replay = True
+    print(f'replay={replay} ({"run twice and compare" if replay else "run just once"})')
 
-start = time()
-env = TEST_2_2P_build_in_AI(render=False, replay=replay)
-curr_time = time()-start
-sum_time += curr_time
-sum_actions += len(env.actions_log.actions)
-invalid_actions = sum(1 for a in env.actions_log.actions if not a.is_valid)
-sum_invalid_actions += invalid_actions
-print(f' test  0 done in: {curr_time:>2.3f} sec, day: {env.map.GetDayStr()}, winners: {[p.idx+1 for p in env.winners]}, actions: {len(env.actions_log.actions):>5}, invalid actions: {invalid_actions:>3}.\n')
+    start = time()
+    env = TEST_2_2P_build_in_AI(render=False, replay=replay)
+    curr_time = time()-start
+    sum_time += curr_time
+    sum_actions += len(env.actions_log.actions)
+    invalid_actions = sum(1 for a in env.actions_log.actions if not a.is_valid)
+    sum_invalid_actions += invalid_actions
+    print(f' test  0 done in: {curr_time:>2.3f} sec, day: {env.map.GetDayStr()}, winners: {[p.idx+1 for p in env.winners]}, actions: {len(env.actions_log.actions):>5}, invalid actions: {invalid_actions:>3}.\n')
 
-sum_time = 0
-sum_actions = 0
-sum_invalid_actions = 0
+    sum_time = 0
+    sum_actions = 0
+    sum_invalid_actions = 0
 
-test_without_cache = True
-if test_without_cache:
-    print(f'\n === no cache ===')
-    for i in range(num_games):
-        #print(f' === test {i+1:> 2} ===')
-        start = time()
-        # env = TEST_2_2P_build_in_AI(render=False, replay=replay)
-        env1 = TEST_Hardcoded_Template_Env(render=False, replay=replay, seed=seeds[i])
-        curr_time = time()-start
-        sum_time += curr_time
-        sum_actions += len(env1.actions_log.actions)
-        invalid_actions = sum(1 for a in env1.actions_log.actions if not a.is_valid)
-        sum_invalid_actions += invalid_actions
-        print(f' test {i+1:>2} done in: {curr_time:>2.3f} sec, day: {env1.map.GetDayStr()}, winners: {[p.idx+1 for p in env1.winners]}, actions: {len(env1.actions_log.actions):>5}, invalid actions: {invalid_actions:>3}.')
-    sleep(1)
+    test_without_cache = True
+    if test_without_cache:
+        print(f'\n === no cache ===')
+        for i in range(num_games):
+            #print(f' === test {i+1:> 2} ===')
+            start = time()
+            # env = TEST_2_2P_build_in_AI(render=False, replay=replay)
+            env1 = TEST_Hardcoded_Template_Env(render=False, replay=replay, seed=seeds[i])
+            curr_time = time()-start
+            sum_time += curr_time
+            sum_actions += len(env1.actions_log.actions)
+            invalid_actions = sum(1 for a in env1.actions_log.actions if not a.is_valid)
+            sum_invalid_actions += invalid_actions
+            print(f' test {i+1:>2} done in: {curr_time:>2.3f} sec, day: {env1.map.GetDayStr()}, winners: {[p.idx+1 for p in env1.winners]}, actions: {len(env1.actions_log.actions):>5}, invalid actions: {invalid_actions:>3}.')
+        sleep(1)
 
-    print(f"""Average (no cache):
-    time/game = {(sum_time/(num_games)):>2.3f}, time/action = {(sum_time/sum_actions):>2.5f}
-    actions/game = {(sum_actions/(num_games)):>6.2f}, invalid actions/game = {(sum_invalid_actions/(num_games)):>4.2f}""")
+        print(f"""Average (no cache):
+        time/game = {(sum_time/(num_games)):>2.3f}, time/action = {(sum_time/sum_actions):>2.5f}
+        actions/game = {(sum_actions/(num_games)):>6.2f}, invalid actions/game = {(sum_invalid_actions/(num_games)):>4.2f}""")
 
-sum_time = 0
-sum_actions = 0
-sum_invalid_actions = 0
+    sum_time = 0
+    sum_actions = 0
+    sum_invalid_actions = 0
 
-test_with_cache = True
-if test_with_cache:
-    print(f'\n === with cache ===')
-    for i in range(num_games):
-        #print(f' === test {i+1:> 2} ===')
-        start = time()
-        # env = TEST_2_2P_build_in_AI(render=False, replay=replay)
-        env2 = TEST_Hardcoded_Template_Env(render=False, replay=replay, seed=seeds[i], use_map_cache=True)
-        curr_time = time()-start
-        sum_time += curr_time
-        sum_actions += len(env2.actions_log.actions)
-        invalid_actions = sum(1 for a in env2.actions_log.actions if not a.is_valid)
-        sum_invalid_actions += invalid_actions
-        print(f' test {i+1:>2} done in: {curr_time:>2.3f} sec, day: {env2.map.GetDayStr()}, winners: {[p.idx+1 for p in env2.winners]}, actions: {len(env2.actions_log.actions):>5}, invalid actions: {invalid_actions:>3}.')
-    sleep(1)
+    test_with_cache = True
+    if test_with_cache:
+        print(f'\n === with cache ===')
+        for i in range(num_games):
+            #print(f' === test {i+1:> 2} ===')
+            start = time()
+            # env = TEST_2_2P_build_in_AI(render=False, replay=replay)
+            env2 = TEST_Hardcoded_Template_Env(render=False, replay=replay, seed=seeds[i], use_map_cache=True)
+            curr_time = time()-start
+            sum_time += curr_time
+            sum_actions += len(env2.actions_log.actions)
+            invalid_actions = sum(1 for a in env2.actions_log.actions if not a.is_valid)
+            sum_invalid_actions += invalid_actions
+            print(f' test {i+1:>2} done in: {curr_time:>2.3f} sec, day: {env2.map.GetDayStr()}, winners: {[p.idx+1 for p in env2.winners]}, actions: {len(env2.actions_log.actions):>5}, invalid actions: {invalid_actions:>3}.')
+        sleep(1)
 
-    print(f"""Average (with cache):
-    time/game = {(sum_time/(num_games)):>2.3f}, time/action = {(sum_time/sum_actions):>2.5f}
-    actions/game = {(sum_actions/(num_games)):>6.2f}, invalid actions/game = {(sum_invalid_actions/(num_games)):>4.2f}""")
+        print(f"""Average (with cache):
+        time/game = {(sum_time/(num_games)):>2.3f}, time/action = {(sum_time/sum_actions):>2.5f}
+        actions/game = {(sum_actions/(num_games)):>6.2f}, invalid actions/game = {(sum_invalid_actions/(num_games)):>4.2f}""")
 
 #input('press any key')
 run_in_cmd=True
