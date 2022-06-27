@@ -172,6 +172,7 @@ class GameObserverMinimalFlat(GameObserverMinimal):
 
 class GameObserverReallyMinimal(GameObserver):
     def __init__(self) -> None:
+        self.buildings_list = GameObserverMinimal.BUILDINGS_LIST
         self.desc_dict = OrderedDict()
         self.obs_dict = OrderedDict()
         self.max_AIVal = int(np.log2(3 * UnitUtils.GetAIValue(UnitUtils.GetUnitTypeByName('Archangel'))))
@@ -181,15 +182,19 @@ class GameObserverReallyMinimal(GameObserver):
         self.desc_dict[key_base+'-x'] = spaces.Discrete(env.game.map.size[0])
         self.desc_dict[key_base+'-y'] = spaces.Discrete(env.game.map.size[1])
         self.desc_dict[key_base+'-level'] = spaces.Discrete(10) # it's never going to reach level 10 on minimal games
+        # movement is trimmed down to smaller values by inferring the maximum number of steps:
+        #   max units / (smallest step cost without penalty * smallest movement factor)
+        self.desc_dict[key_base+'-movement'] = spaces.Discrete(4000 / (100 * 0.5))
         self.desc_dict[key_base+'-armyStr'] = spaces.Discrete(
             # HOMMArmyStack.MAX_IN_STACK * UnitUtils.GetAIValue(UnitUtils.GetUnitTypeByName('Archangel')))
             2 + self.max_AIVal)
 
-    def __town_desc__(self, env:HOMMGymEnv, idx:int=0, player_idx:int=0):
+    def __town_desc__(self, env:HOMMGymEnv, idx:int=0):
         key_base = f'town{idx+1}'
         self.desc_dict[key_base+'-x'] = spaces.Discrete(env.game.map.size[0])
         self.desc_dict[key_base+'-y'] = spaces.Discrete(env.game.map.size[1])
         self.desc_dict[key_base+'-owner'] = spaces.Discrete(3)
+        self.desc_dict[key_base+'-buildings'] = spaces.MultiBinary(len(GameObserverMinimal.BUILDINGS_LIST))
         self.desc_dict[key_base+'-armyStr'] = spaces.Discrete(
             # HOMMArmyStack.MAX_IN_STACK * UnitUtils.GetAIValue(UnitUtils.GetUnitTypeByName('Archangel')))
             2 + self.max_AIVal)
@@ -217,10 +222,10 @@ class GameObserverReallyMinimal(GameObserver):
         self.__hero_desc__(env, idx=0, own=False) # enemy hero - there is only one
 
         # there can only be 4 towns on the HardcodedTemplate
-        self.__town_desc__(env, idx=0, player_idx=0) # town 1
-        self.__town_desc__(env, idx=1, player_idx=0) # town 2
-        self.__town_desc__(env, idx=2, player_idx=0) # town 3
-        self.__town_desc__(env, idx=3, player_idx=0) # town 4
+        self.__town_desc__(env, idx=0) # town 1
+        self.__town_desc__(env, idx=1) # town 2
+        self.__town_desc__(env, idx=2) # town 3
+        self.__town_desc__(env, idx=3) # town 4
 
         self.__neutral_desc__(env, idx= 0) # neutral army  1
         self.__neutral_desc__(env, idx= 1) # neutral army  2
@@ -243,6 +248,7 @@ class GameObserverReallyMinimal(GameObserver):
         self.obs_dict[f'{key_base}-x'] = hero.x if hero else 0
         self.obs_dict[f'{key_base}-y'] = hero.y if hero else 0
         self.obs_dict[f'{key_base}-level'] = hero.GetLevel() if hero else 0
+        self.obs_dict[f'{key_base}-movement'] = int(hero.curr_movement/(100 * 0.5)) if hero else 0
         self.obs_dict[f'{key_base}-armyStr'] = min(self.max_AIVal,int(np.log2(hero.army.GetAIVal()))) if hero else 0
     
     def __town_obs__(self, env:HOMMGymEnv, town_idx:int, player_idx:int=0) -> list:
@@ -255,6 +261,8 @@ class GameObserverReallyMinimal(GameObserver):
         self.obs_dict[f'{key_base}-x'] = town.x if can_see else 0
         self.obs_dict[f'{key_base}-y'] = town.y if can_see else 0
         self.obs_dict[f'{key_base}-owner'] = 1 + town.player_idx if can_see else 0
+        self.obs_dict[f'{key_base}-buildings'] = [1 if can_see and building in town.buildings else 0
+                                                    for building in GameObserverMinimal.BUILDINGS_LIST]
         self.obs_dict[f'{key_base}-armyStr'] = min(self.max_AIVal,
             int(np.log2(town.army.GetAIVal()))
         ) if can_see and town.army and town.army.GetAIVal()>0 else 0

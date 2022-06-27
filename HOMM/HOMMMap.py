@@ -188,9 +188,9 @@ class HOMMTemplate(object):
 
 class HardcodedTemplate(object):
     ARMY_STRENGTH_AIVALS = {
-        'weak': 1000,
-        'normal': 2000,
-        'strong': 3000,
+        'weak': 500,
+        'normal': 1000,
+        'strong': 2000,
     }
     def __init__(self, areas:int=2, size:str="S", max_day='2:1:1', monster_strength:str='weak',
                 max_heroes:int=4, allowed_actions_per_turn:int=50) -> None:
@@ -470,7 +470,7 @@ class HardcodedTemplate(object):
     
     def __generate_army__(self, env:HOMMSimpleEnv, pos:tuple[int,int]) -> HOMMArmy:
         assert pos, 'Error: army position can not be None'
-        strength = int((0.8 + env.rs.random() * (1.3 - 0.8)) * HardcodedTemplate.ARMY_STRENGTH_AIVALS[self.monster_strength])
+        strength = int((0.8 + env.rs.random() * (1.2 - 0.8)) * HardcodedTemplate.ARMY_STRENGTH_AIVALS[self.monster_strength])
         possible_unit_types = [unit_type for unit_type in UnitTypes if UnitUtils.GetAIValue(unit_type) < strength and unit_type > 0]
         unit_type = env.rs.choice(possible_unit_types)
         total_creatures = int(strength / UnitUtils.GetAIValue(unit_type))

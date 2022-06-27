@@ -1,3 +1,4 @@
+from copy import copy, deepcopy
 from datetime import datetime
 from itertools import count
 import HOMMGymEnv
@@ -18,21 +19,30 @@ max_day = '1:3:2'
 allowed_actions_per_turn=50
 env = HOMMGymEnv.HOMMGymEnv(map_size='T', max_day=max_day,
     allowed_actions_per_turn=allowed_actions_per_turn,
+    
     p2_use_procedural_ai=True, p2_dummy_num=0,
+    #p2_use_procedural_ai=False,
+
     #observation_encoding='dict', action_mapper='big-flat'
     #observation_encoding='selection-flat', action_mapper='selection',
     # observation_encoding='minimal', action_mapper='minimal',
     # observation_encoding='really-minimal-flat', action_mapper='only-move',
     observation_encoding='really-minimal-flat', action_mapper='minimal',
-    fixed_seed=None,
+    fixed_seed=3128162577,
 )
 
-#'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=44793690 minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-17 23.48.18.zip'
+# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=44793690 minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-17 23.48.18.zip'
 # 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=1024681898 minimal-ish_vsDummyAI trainT=0h.23m at 2022-06-18 00.25.37.zip'
-saved_name = 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-18 00.58.01.zip'
+# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-18 00.58.01.zip'
+# 'DQN map=19x19 turn-max_30 day-max=15 steps=100000 L-rate=0.0008 seed=820936207 minimal-ish_vsDummyAI trainT=0h.12m at 2022-06-26 13.06.30.zip'
+# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-27 19.37.35.zip'
+saved_name = 'DQN map=19x19 seed=3128162577 maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v DummyAI0 trT=0h.16m at 2022-06-27 22.21.29.zip'
 print(f'loading model "{saved_name}" ...')
 model = DQN.load('trained_models\\'+saved_name, env=env)
 # model = DQN.load('trained_models\\'+saved_name, env=env)
+
+# for player 2
+model2 = copy(model) # should this be deep? 
 
 # the +1 is there because there can also be unacceptable actions which are not counted
 #   ...they could go on forever, but without them the game could end up in an invalid state
@@ -46,7 +56,10 @@ renderer:HOMMColorTextConsoleRender = env.game.renderer
 renderer.print_battles = False
 renderer.interactive_play = True
 for i in range(max_steps):
-    action, _states = model.predict(obs, deterministic=True)
+    if env.game.map.curr_player_idx == 0:
+        action, _states = model.predict(obs, deterministic=True)
+    else:
+        action, _states = model2.predict(obs, deterministic=True)
     obs, rewards, dones, info = env.step(action=action)
     if env.game.ended:
         break
@@ -66,7 +79,7 @@ print(f'after {i} steps played in {curr_time:> 5.2f}s: game.ended={env.game.ende
 #         print(f'[{idx:> 5}] day={a.day:> 2} action: {str(a)}')
 
 # print('rendering...\n')
-input('press any key, to render...')
+input('press any key to render the game...')
 if renderer:
     renderer.__init_image_capture__()
     renderer.Playback()

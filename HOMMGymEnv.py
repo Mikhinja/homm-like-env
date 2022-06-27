@@ -87,7 +87,7 @@ class HOMMGymEnv(Env):
     # for debugging
     ACTIONS_THAT_WON = []
     ACTION_REWARDS = []
-    TRAIN_STEP = 0
+    TRAIN_STEP:int = 0
     
     def __init__(self, map_size:str='S', p2_use_procedural_ai:bool=True, p2_dummy_num:int=-1,
             max_heroes:int=1, allowed_actions_per_turn:int=50,
@@ -148,6 +148,8 @@ class HOMMGymEnv(Env):
         self.action_mapper_name = action_mapper
         self.action_mapper = GameActionMapper.GetActionMapper(mapper_type=action_mapper, env=self)
         self.action_space = self.action_mapper.GetActionSpace(self)
+
+        self.__prev_num_turn_actions = [0, 0]
     
     def reset(self, *, seed: Optional[int] = None, return_info: bool = False, options: Optional[dict] = None):
         assert self.template
@@ -241,7 +243,7 @@ class HOMMGymEnv(Env):
             else:
                 self.unacceptable_actions_since_last = self.invalid_actions_since_last = 0
         # hack to do some info from the training process
-        if self.game.ended and self.ML_player_idx in self.game.winners:
+        if self.game.ended and self.game.map.curr_player_idx in self.game.winners:
             if isinstance(homm_action, list):
                 self.ACTIONS_THAT_WON += homm_action
             else:
@@ -261,9 +263,9 @@ class HOMMGymEnv(Env):
         
         # for investigating
         if isinstance(homm_action, list):
-            self.ACTION_REWARDS.append(f'[day={self.game.map.day:>2}][=>{reward:>5.1f}] '+'\n\t\t\t\t '.join(f'{a} | {a.agent_intent}' for a in homm_action))
+            self.ACTION_REWARDS.append(f'[day={self.game.map.day:>2}][=>{reward:>5.1f}] '+'\n\t\t\t\t '.join(f'{a} | {a.agent_intent if a else None}' for a in homm_action))
         else:
-            self.ACTION_REWARDS.append(f'[day={self.game.map.day:>2}][=>{reward:>5.1f}] {homm_action} | {homm_action.agent_intent}')
+            self.ACTION_REWARDS.append(f'[day={self.game.map.day:>2}][=>{reward:>5.1f}] {homm_action} | {homm_action.agent_intent if homm_action else None}')
 
         obs = self.observer.GetObservation(self)
         info = self.__get_info__()
@@ -294,8 +296,8 @@ class HOMMGymEnv(Env):
         if n==0:
             return 0
         elif n<0:
-            return -HOMMGymEnv.__log__(-n)
-        return np.log(n)
+            return -(HOMMGymEnv.__log__(-n)/2)
+        return np.log(n) # would this work better with log2 instead?
     
     @staticmethod
     def __sum_resources__(res:list[int]) -> int:
@@ -306,18 +308,18 @@ class HOMMGymEnv(Env):
             action_was_valid:bool=True,
             action_was_end_turn:bool=False) -> np.float32:
         # TODO: refactor this to work for all players (for self-play)
-        assert self.ML_player_idx == self.game.map.curr_player_idx or self.game.ended or self.game.map.hero_leveling_up
+        #assert self.ML_player_idx == self.game.map.curr_player_idx or self.game.ended or self.game.map.hero_leveling_up
         reward = 0
         if action_was_valid:
-            player = self.game.map.players[self.ML_player_idx]
-            other = self.game.map.players[self.ML_player_idx - 1]
+            player = self.game.map.players[self.game.map.curr_player_idx]
+            other = self.game.map.players[self.game.map.curr_player_idx - 1]
             player_AIVal = player.GetAIVal()
             other_AIVal = other.GetAIVal()
-            player_delta = player_AIVal - self.prev_AIVals[self.ML_player_idx]
+            player_delta = player_AIVal - self.prev_AIVals[self.game.map.curr_player_idx]
             # we only consider other player's incremental actions during our own turn,
             #   otherwise it will mess up values of end-turn actions (when not forced)
             #   and of last action before forced end-turn action, whichever that may be
-            other_delta = other_AIVal - self.prev_AIVals[self.ML_player_idx - 1] if not action_was_end_turn else 0
+            other_delta = other_AIVal - self.prev_AIVals[self.game.map.curr_player_idx - 1] if not action_was_end_turn else 0
             players_visibility = [np.count_nonzero(self.game.map.players[0].visibility), np.count_nonzero(self.game.map.players[1].visibility)]
             #reward = player_AIVal + (player_delta - other_delta) if not self.game.ended else 0
             reward += self.__log__(player_delta//2)
@@ -329,7 +331,12 @@ class HOMMGymEnv(Env):
             reward += self.REWARD_PER_HERO_LEVEL * (curr_SumHeroLevels[self.game.map.curr_player_idx] - self.prev_SumHeroLevels[self.game.map.curr_player_idx])
             curr_sum_res = self.__sum_resources__(self.game.map.players[0].resources)
             curr_sum_res /= 10 # should be less than army value, always
-            if not action_was_end_turn:
+            if action_was_end_turn:
+                if self.__prev_num_turn_actions[self.game.map.curr_player_idx] < 1:
+                    reward += self.INVALID_ACTION_REWARD #/ 2
+                self.__prev_num_turn_actions[self.game.map.curr_player_idx] = 0
+            else:
+                self.__prev_num_turn_actions[self.game.map.curr_player_idx] = self.game.actions_this_turn
                 res_diff = curr_sum_res - self.prev_SumResources[0]
                 if res_diff > 0: # is it ok to only consider resource gains, not spending?
                     reward += self.__log__(curr_sum_res - self.prev_SumResources[0])
@@ -337,7 +344,7 @@ class HOMMGymEnv(Env):
             if self.game.ended:
                 if player.IsDefeated():
                     reward -= self.WIN_LOSS_REWARD
-                # if self.ML_player_idx in self.game.winners:
+                # if self.game.map.curr_player_idx in self.game.winners:
                 #     reward += self.WIN_LOSS_REWARD
                 if other.IsDefeated():
                     reward += self.WIN_LOSS_REWARD
@@ -353,5 +360,5 @@ class HOMMGymEnv(Env):
         
         #reward += self.INVALID_ACTION_REWARD # is this a good idea?
         
-        self.total_rewards[self.ML_player_idx] += reward
+        self.total_rewards[self.game.map.curr_player_idx] += reward
         return np.float32(reward)

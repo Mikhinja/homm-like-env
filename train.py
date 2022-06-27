@@ -12,21 +12,20 @@ from HOMM.HOMMActions import ActionEndTurn
 from HOMM.HOMMBuiltInAI_Battle import BattleAction
 from random import randint
 
-allowed_actions_per_turn=30
+allowed_actions_per_turn=20
 start_start = time()
 
 # set this to some number to fix the map, None for randomly generated maps
-fixed_seed = None # None # randint(0, 1<<32)
+fixed_seed = randint(0, 1<<32) # None # randint(0, 1<<32)
+
 # map sizes: T=19x19, S-=27x27, S=36x36, S+=36x56, M=72x72, L=108x108, XL= 144x144, H=180x180, XH=216x216, G=252x252
 map_size = 'T'
 max_day = '1:3:2'
 
-extra_desc = 'minimal-ish_vsDummyAI'
-
 env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     max_day=max_day,
     allowed_actions_per_turn=allowed_actions_per_turn,
-    p2_use_procedural_ai=True, p2_dummy_num=1,
+    p2_use_procedural_ai=True, p2_dummy_num=0,
     #observation_encoding='dict', action_mapper='big-flat'
     #observation_encoding='selection-flat', action_mapper='selection',
     # observation_encoding='selection-flat', action_mapper='selection-reduced',
@@ -36,19 +35,21 @@ env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     fixed_seed=fixed_seed
 )
 
+extra_desc = f'minimal-ish v DummyAI{env.p2_dummy_num}'
+
 # MlpPolicy -- does not support dict as observation space
 # model = PPO('MultiInputPolicy', env, verbose=1)
-learning_rate = 1e-3
-buffer_size = 50_000 # de facut mai mare (mult mai mare decat 700)!
-exploration_fraction = 0.3
+learning_rate = 8e-4 # good results between 8e-4 and 1e-3
+buffer_size = 100_000 # de facut mai mare (mult mai mare decat 700)!
+exploration_fraction = 0.4
 
 # TODO: redus spatiul actiunilor ~15
 
 ### MultiInputPolicy  MlpPolicy
 # model = PPO('MlpPolicy', env=env, verbose=1,
 #     learning_rate=learning_rate,
-#     batch_size=240, # 300?
-#     n_steps=10*240, # make this bigger, a multiple of batch_size
+#     batch_size=120, # 240?
+#     n_steps=10*120, # make this bigger, a multiple of batch_size
 #     gamma=0.99,
 #     #n_epochs=env.game.max_day, # is this ok, to have an entire game?
     
@@ -60,15 +61,15 @@ model = DQN('MlpPolicy', env, verbose=1,
     learning_rate=learning_rate,
     #tau=0.9,
     gamma=0.99,
-    learning_starts=1000,
+    learning_starts=10_000,
     exploration_fraction=exploration_fraction,
     #exploration_final_eps=0.1,
     #train_freq=(allowed_actions_per_turn//10, 'step')
-    train_freq=(50, 'step'), # 50 - 100
-    batch_size=300 # to also try up to 450
+    train_freq=(50, 'step'), # 50 - 100 # 'step' or 'episode'
+    batch_size=300 # also good results with 240
 )
 
-total_timesteps=int(100_000)
+total_timesteps=int(200_000)
 print(f'{type(model)}\n  {extra_desc}'
 f' training total_timesteps={total_timesteps}, learning-rate={learning_rate}'
 f' map-size_{map_size}_{env.game.map.size[0]}x{env.game.map.size[1]}, fixed_seed={fixed_seed},'
@@ -76,7 +77,8 @@ f' turn-max_{allowed_actions_per_turn}, day-max_{env.game.max_day}...')
 
 start = time()
 try:
-    model.learn(total_timesteps=total_timesteps)
+    model.learn(total_timesteps=total_timesteps,
+    log_interval=16)
 except KeyboardInterrupt:
     print(f'interupted after {env.TRAIN_STEP}')
 except Exception as ex:
@@ -90,10 +92,10 @@ print(f'training done in {curr_time:> 5.2f}s. exploration_fraction={exploration_
 
 time_stamp = str(datetime.today())
 time_stamp = time_stamp[:time_stamp.index('.')].replace(':', '.')
-saved_name = (f'{model.__class__.__name__} map={env.game.map.size[0]}x{env.game.map.size[1]}'
-f' turn-max_{allowed_actions_per_turn} day-max={env.game.max_day} steps={env.TRAIN_STEP}'
-f' L-rate={learning_rate} seed={fixed_seed} {extra_desc}'
-f' trainT={int(curr_time//3600)}h.{int((curr_time % 3600)//60)}m at {time_stamp}.zip')
+saved_name = (f'{model.__class__.__name__} map={env.game.map.size[0]}x{env.game.map.size[1]} seed={fixed_seed}'
+f' maxAct={allowed_actions_per_turn} maxDay={env.game.max_day} steps={env.TRAIN_STEP:.0e}'
+f' lr={learning_rate:.0e} batch={model.batch_size} exFr={model.exploration_fraction}'
+f' {extra_desc} trT={int(curr_time//3600)}h.{int((curr_time % 3600)//60)}m at {time_stamp}.zip')
 print(f'saving model "{saved_name}" ...')
 model.save('trained_models\\'+saved_name)
 
