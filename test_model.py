@@ -14,13 +14,14 @@ import sys
 
 cls()
 
+# max_day = '1:2:7'
 max_day = '1:3:2'
 
 allowed_actions_per_turn=50
 env = HOMMGymEnv.HOMMGymEnv(map_size='T', max_day=max_day,
     allowed_actions_per_turn=allowed_actions_per_turn,
     
-    p2_use_procedural_ai=True, p2_dummy_num=0,
+    p2_use_procedural_ai=True, p2_dummy_num=2,
     #p2_use_procedural_ai=False,
 
     #observation_encoding='dict', action_mapper='big-flat'
@@ -28,15 +29,21 @@ env = HOMMGymEnv.HOMMGymEnv(map_size='T', max_day=max_day,
     # observation_encoding='minimal', action_mapper='minimal',
     # observation_encoding='really-minimal-flat', action_mapper='only-move',
     observation_encoding='really-minimal-flat', action_mapper='minimal',
-    fixed_seed=3128162577,
+    fixed_seed=None,
 )
 
+### bad ones
 # 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=44793690 minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-17 23.48.18.zip'
 # 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=1024681898 minimal-ish_vsDummyAI trainT=0h.23m at 2022-06-18 00.25.37.zip'
 # 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-18 00.58.01.zip'
 # 'DQN map=19x19 turn-max_30 day-max=15 steps=100000 L-rate=0.0008 seed=820936207 minimal-ish_vsDummyAI trainT=0h.12m at 2022-06-26 13.06.30.zip'
 # 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-27 19.37.35.zip'
-saved_name = 'DQN map=19x19 seed=3128162577 maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v DummyAI0 trT=0h.16m at 2022-06-27 22.21.29.zip'
+
+
+### good ones
+# 'DQN map=19x19 seed=3128162577 maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v DummyAI0 trT=0h.16m at 2022-06-27 22.21.29.zip'
+# 'PPO map=19x19 seed=4161212843 maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=120  minimal-ish v DummyAI0 trT=0h.20m at 2022-06-28 23.55.34.zip'
+saved_name = 'DQN map=19x19 seed=None maxAct=20 maxDay=15 steps=3e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v DummyAI0 trT=0h.20m at 2022-06-29 00.32.09.zip'
 print(f'loading model "{saved_name}" ...')
 model = DQN.load('trained_models\\'+saved_name, env=env)
 # model = DQN.load('trained_models\\'+saved_name, env=env)

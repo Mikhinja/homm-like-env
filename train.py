@@ -16,7 +16,7 @@ allowed_actions_per_turn=20
 start_start = time()
 
 # set this to some number to fix the map, None for randomly generated maps
-fixed_seed = randint(0, 1<<32) # None # randint(0, 1<<32)
+fixed_seed = None # None # randint(0, 1<<32)
 
 # map sizes: T=19x19, S-=27x27, S=36x36, S+=36x56, M=72x72, L=108x108, XL= 144x144, H=180x180, XH=216x216, G=252x252
 map_size = 'T'
@@ -52,7 +52,6 @@ exploration_fraction = 0.4
 #     n_steps=10*120, # make this bigger, a multiple of batch_size
 #     gamma=0.99,
 #     #n_epochs=env.game.max_day, # is this ok, to have an entire game?
-    
 # )
 
 ### MultiInputPolicy  MlpPolicy
@@ -69,7 +68,7 @@ model = DQN('MlpPolicy', env, verbose=1,
     batch_size=300 # also good results with 240
 )
 
-total_timesteps=int(200_000)
+total_timesteps=int(300_000)
 print(f'{type(model)}\n  {extra_desc}'
 f' training total_timesteps={total_timesteps}, learning-rate={learning_rate}'
 f' map-size_{map_size}_{env.game.map.size[0]}x{env.game.map.size[1]}, fixed_seed={fixed_seed},'
@@ -94,7 +93,7 @@ time_stamp = str(datetime.today())
 time_stamp = time_stamp[:time_stamp.index('.')].replace(':', '.')
 saved_name = (f'{model.__class__.__name__} map={env.game.map.size[0]}x{env.game.map.size[1]} seed={fixed_seed}'
 f' maxAct={allowed_actions_per_turn} maxDay={env.game.max_day} steps={env.TRAIN_STEP:.0e}'
-f' lr={learning_rate:.0e} batch={model.batch_size} exFr={model.exploration_fraction}'
+f' lr={learning_rate:.0e} batch={model.batch_size} {"exFr="+str(model.exploration_fraction) if "DQN" in model.__class__.__name__ else ""}'
 f' {extra_desc} trT={int(curr_time//3600)}h.{int((curr_time % 3600)//60)}m at {time_stamp}.zip')
 print(f'saving model "{saved_name}" ...')
 model.save('trained_models\\'+saved_name)

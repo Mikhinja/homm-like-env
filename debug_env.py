@@ -6,9 +6,9 @@ import sys
 cls()
 
 env = HOMMSimpleEnv()
-#file_name = 'env_dump.json'
-file_name = 'env_seed=578556037_dump.json'
-with open(file_name, 'r') as f:
+# file_name = 'env_dump.json'
+file_name = 'env_seed=3231024768_dump.json'
+with open(f'env_dumps\\{file_name}', 'r') as f:
     s = f.read()
     env.LoadState(s)
     print('load done')

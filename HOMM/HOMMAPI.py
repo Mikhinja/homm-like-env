@@ -426,7 +426,7 @@ class HOMMArmyStackInCombat(object):
         #self.morale = 0 # TODO: get this based on hero attrib
     def GetAIVal(self) -> int:
         return self.curr_num * UnitUtils.GetAIValue(self.stack.unit_type)
-    def GetUnitSpeed(self, otherHero:HOMMHero):
+    def GetUnitSpeed(self, otherHero:HOMMHero) -> int:
         speed = self.stack.GetUnitSpeed()
         speed += self.hero.GetBonus('speed') if self.hero else 0
         # spell modifiers
@@ -440,7 +440,7 @@ class HOMMArmyStackInCombat(object):
             else:
                 val = HeroSpells[HeroSpellUtils.GetSpellId('slow')][1]
             speed *= 1 - val
-        return speed
+        return int(speed)
     
     def TakeDamage(self, damage:int):
         if damage < self.health_left:

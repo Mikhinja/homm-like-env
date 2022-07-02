@@ -184,7 +184,7 @@ class GameObserverReallyMinimal(GameObserver):
         self.desc_dict[key_base+'-level'] = spaces.Discrete(10) # it's never going to reach level 10 on minimal games
         # movement is trimmed down to smaller values by inferring the maximum number of steps:
         #   max units / (smallest step cost without penalty * smallest movement factor)
-        self.desc_dict[key_base+'-movement'] = spaces.Discrete(4000 / (100 * 0.5))
+        self.desc_dict[key_base+'-movement'] = spaces.Discrete(int(4000 / (100 * 0.5)))
         self.desc_dict[key_base+'-armyStr'] = spaces.Discrete(
             # HOMMArmyStack.MAX_IN_STACK * UnitUtils.GetAIValue(UnitUtils.GetUnitTypeByName('Archangel')))
             2 + self.max_AIVal)
@@ -198,6 +198,7 @@ class GameObserverReallyMinimal(GameObserver):
         self.desc_dict[key_base+'-armyStr'] = spaces.Discrete(
             # HOMMArmyStack.MAX_IN_STACK * UnitUtils.GetAIValue(UnitUtils.GetUnitTypeByName('Archangel')))
             2 + self.max_AIVal)
+        self.desc_dict[key_base+'-creatures'] = spaces.Discrete(2 + self.max_AIVal)
 
     
     def __neutral_desc__(self, env:HOMMGymEnv, idx:int) -> list:
@@ -266,6 +267,9 @@ class GameObserverReallyMinimal(GameObserver):
         self.obs_dict[f'{key_base}-armyStr'] = min(self.max_AIVal,
             int(np.log2(town.army.GetAIVal()))
         ) if can_see and town.army and town.army.GetAIVal()>0 else 0
+        self.obs_dict[f'{key_base}-creatures'] = min(self.max_AIVal,
+            int(np.log2(1+sum(town.creature_bank)))
+        ) if can_see else 0
     
     def __neutral_obs__(self, env:HOMMGymEnv, neutral_idx:int, player_idx:int=0) -> list:
         key_base = f'neutral{neutral_idx+1}'

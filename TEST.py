@@ -238,7 +238,7 @@ def active_window_process_name():
 curr_proc_name = active_window_process_name()
 run_in_cmd = 'cmd.exe' in curr_proc_name.lower()
 
-num_games = 0
+num_games = 10
 
 if num_games:
     seeds = [random.randint(0, 2**31) for _ in range(num_games)]
@@ -307,7 +307,7 @@ if num_games:
         actions/game = {(sum_actions/(num_games)):>6.2f}, invalid actions/game = {(sum_invalid_actions/(num_games)):>4.2f}""")
 
 #input('press any key')
-run_in_cmd=True
+run_in_cmd=False
 if run_in_cmd:
     TEST_Hardcoded_Template_Env(render=run_in_cmd)
 

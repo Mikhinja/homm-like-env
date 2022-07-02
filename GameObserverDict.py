@@ -1,3 +1,4 @@
+from typing import OrderedDict
 from gym import Space, spaces
 from HOMMGymEnv import HOMMGymEnv, GameObserver, GameActionMapper
 from HOMM.HOMMAPI import HOMMAction, HOMMArmyStack
@@ -12,10 +13,9 @@ _total_unit_types = len(UnitTypes) # len(UnitTypes) -- revisit this
 
 class GameObserverDict(GameObserver):
     def GetSpace(self, env:HOMMGymEnv) -> Space:
-        desc_dict = {
-            # map tiles, offset by 1 because 0 will mean not visible to current player
-            'map': spaces.Box(low=0, high=1+len(TileTypesByName), shape=env.game.map.size),
-        }
+        desc_dict = OrderedDict()
+        # map tiles, offset by 1 because 0 will mean not visible to current player
+        desc_dict['map'] = spaces.Box(low=0, high=1+len(TileTypesByName), shape=env.game.map.size)
 
         self.__get_hero_obs_desc__(env, desc_dict, 0)
         self.__get_hero_obs_desc__(env, desc_dict, 1)
@@ -50,10 +50,10 @@ class GameObserverDict(GameObserver):
         assert len(other_towns) <= 4
         assert len(env.game.map.neutral_armies) <= 16, 'template error: there are more than 16 neutral armies'
 
-        dict_obs = {
-            # map, masked by what is visible to current player
-            'map': (env.game.map.tiles[0,] + 1) * player.visibility.astype(int)
-        }
+        dict_obs = OrderedDict()
+        # map, masked by what is visible to current player
+        dict_obs['map'] = (env.game.map.tiles[0,] + 1) * player.visibility.astype(int)
+        
         self.__hero_obs__(env, dict_obs, 0)
         self.__hero_obs__(env, dict_obs, 1)
         self.__hero_obs__(env, dict_obs, 2)
