@@ -12,11 +12,11 @@ from HOMM.HOMMActions import ActionEndTurn
 from HOMM.HOMMBuiltInAI_Battle import BattleAction
 from random import randint
 
-allowed_actions_per_turn=20
+allowed_actions_per_turn=10
 start_start = time()
 
 # set this to some number to fix the map, None for randomly generated maps
-fixed_seed = None # None # randint(0, 1<<32)
+fixed_seed = randint(0, 1<<32) # None # randint(0, 1<<32)
 
 # map sizes: T=19x19, S-=27x27, S=36x36, S+=36x56, M=72x72, L=108x108, XL= 144x144, H=180x180, XH=216x216, G=252x252
 map_size = 'T'
@@ -25,7 +25,7 @@ max_day = '1:3:2'
 env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     max_day=max_day,
     allowed_actions_per_turn=allowed_actions_per_turn,
-    p2_use_procedural_ai=True, p2_dummy_num=0,
+    p2_use_procedural_ai=True, p2_dummy_num=-1,
     #observation_encoding='dict', action_mapper='big-flat'
     #observation_encoding='selection-flat', action_mapper='selection',
     # observation_encoding='selection-flat', action_mapper='selection-reduced',
@@ -35,7 +35,7 @@ env = HOMMGymEnv.HOMMGymEnv(map_size=map_size,
     fixed_seed=fixed_seed
 )
 
-extra_desc = f'minimal-ish v DummyAI{env.p2_dummy_num}'
+extra_desc = f'minimal-ish v {"Procedural" if env.p2_dummy_num<0 else "Dummy"}AI{env.p2_dummy_num}'
 
 # MlpPolicy -- does not support dict as observation space
 # model = PPO('MultiInputPolicy', env, verbose=1)
@@ -46,27 +46,27 @@ exploration_fraction = 0.4
 # TODO: redus spatiul actiunilor ~15
 
 ### MultiInputPolicy  MlpPolicy
-# model = PPO('MlpPolicy', env=env, verbose=1,
-#     learning_rate=learning_rate,
-#     batch_size=120, # 240?
-#     n_steps=10*120, # make this bigger, a multiple of batch_size
-#     gamma=0.99,
-#     #n_epochs=env.game.max_day, # is this ok, to have an entire game?
-# )
+model = PPO('MlpPolicy', env=env, verbose=1,
+    learning_rate=learning_rate,
+    batch_size=120, # 240?
+    n_steps=10*120, # make this bigger, a multiple of batch_size
+    gamma=0.99,
+    #n_epochs=env.game.max_day, # is this ok, to have an entire game?
+)
 
 ### MultiInputPolicy  MlpPolicy
-model = DQN('MlpPolicy', env, verbose=1,
-    buffer_size=buffer_size,
-    learning_rate=learning_rate,
-    #tau=0.9,
-    gamma=0.99,
-    learning_starts=10_000,
-    exploration_fraction=exploration_fraction,
-    #exploration_final_eps=0.1,
-    #train_freq=(allowed_actions_per_turn//10, 'step')
-    train_freq=(50, 'step'), # 50 - 100 # 'step' or 'episode'
-    batch_size=300 # also good results with 240
-)
+# model = DQN('MlpPolicy', env, verbose=1,
+#     buffer_size=buffer_size,
+#     learning_rate=learning_rate,
+#     #tau=0.9,
+#     gamma=0.99,
+#     learning_starts=10_000,
+#     exploration_fraction=exploration_fraction,
+#     #exploration_final_eps=0.1,
+#     #train_freq=(allowed_actions_per_turn//10, 'step')
+#     train_freq=(50, 'step'), # 50 - 100 # 'step' or 'episode'
+#     batch_size=300 # also good results with 240
+# )
 
 total_timesteps=int(300_000)
 print(f'{type(model)}\n  {extra_desc}'
@@ -108,7 +108,7 @@ if fixed_seed:
             f.write(env.game.SaveState())
     print(f'\nsaved env as {env_dump_file}')
 
-with open(f'train_action_logs\\action_rewards_seed={fixed_seed}.txt', 'w') as f:
+with open(f'train_action_logs\\action_rewards_{model.__class__.__name__}_seed={fixed_seed}.txt', 'w') as f:
     print(f'{model.__class__.__name__}, fix-seed={fixed_seed} {extra_desc}, L-rate_{learning_rate}', file=f)
     print(f'train time={int(curr_time//3600)}h.{int((curr_time % 3600)//60)}m, at {time_stamp}', file=f)
     print(f'saved as {saved_name}', file=f)

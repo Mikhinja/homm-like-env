@@ -17,11 +17,11 @@ cls()
 # max_day = '1:2:7'
 max_day = '1:3:2'
 
-allowed_actions_per_turn=50
+allowed_actions_per_turn=10
 env = HOMMGymEnv.HOMMGymEnv(map_size='T', max_day=max_day,
     allowed_actions_per_turn=allowed_actions_per_turn,
     
-    p2_use_procedural_ai=True, p2_dummy_num=2,
+    p2_use_procedural_ai=True, #p2_dummy_num=2,
     #p2_use_procedural_ai=False,
 
     #observation_encoding='dict', action_mapper='big-flat'
@@ -29,24 +29,24 @@ env = HOMMGymEnv.HOMMGymEnv(map_size='T', max_day=max_day,
     # observation_encoding='minimal', action_mapper='minimal',
     # observation_encoding='really-minimal-flat', action_mapper='only-move',
     observation_encoding='really-minimal-flat', action_mapper='minimal',
-    fixed_seed=None,
+    fixed_seed=656093448,
 )
 
-### bad ones
-# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=44793690 minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-17 23.48.18.zip'
-# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=1024681898 minimal-ish_vsDummyAI trainT=0h.23m at 2022-06-18 00.25.37.zip'
-# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-18 00.58.01.zip'
-# 'DQN map=19x19 turn-max_30 day-max=15 steps=100000 L-rate=0.0008 seed=820936207 minimal-ish_vsDummyAI trainT=0h.12m at 2022-06-26 13.06.30.zip'
-# 'DQN map=19x19 turn-max_30 day-max=15 steps=200000 L-rate=0.001 seed=None minimal-ish_vsDummyAI trainT=0h.21m at 2022-06-27 19.37.35.zip'
-
-
-### good ones
+### latest
 # 'DQN map=19x19 seed=3128162577 maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v DummyAI0 trT=0h.16m at 2022-06-27 22.21.29.zip'
+# 'DQN map=19x19 seed=None maxAct=20 maxDay=15 steps=3e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v DummyAI0 trT=0h.20m at 2022-06-29 00.32.09.zip'
+# 'DQN map=19x19 seed=None maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v ProceduralAI-1 trT=0h.22m at 2022-07-03 14.03.46.zip' # still negative
+# 'DQN map=19x19 seed=2123588468 maxAct=10 maxDay=15 steps=3e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v ProceduralAI-1 trT=0h.36m at 2022-07-03 15.51.21.zip' # doesn't lose outright
+
 # 'PPO map=19x19 seed=4161212843 maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=120  minimal-ish v DummyAI0 trT=0h.20m at 2022-06-28 23.55.34.zip'
-saved_name = 'DQN map=19x19 seed=None maxAct=20 maxDay=15 steps=3e+05 lr=8e-04 batch=300 exFr=0.4 minimal-ish v DummyAI0 trT=0h.20m at 2022-06-29 00.32.09.zip'
+# 'PPO map=19x19 seed=None maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=120  minimal-ish v DummyAI0 trT=0h.24m at 2022-07-03 12.33.38.zip' # rw mean negative few tens
+# 'PPO map=19x19 seed=None maxAct=20 maxDay=15 steps=2e+05 lr=8e-04 batch=120  minimal-ish v ProceduralAI-1 trT=0h.50m at 2022-07-03 13.33.32.zip' rw mean still negative
+# 'PPO map=19x19 seed=656093448 maxAct=10 maxDay=15 steps=3e+05 lr=8e-04 batch=120  minimal-ish v ProceduralAI-1 trT=0h.31m at 2022-07-03 17.40.29.zip'
+
+saved_name = 'PPO map=19x19 seed=656093448 maxAct=10 maxDay=15 steps=3e+05 lr=8e-04 batch=120  minimal-ish v ProceduralAI-1 trT=0h.31m at 2022-07-03 17.40.29.zip'
 print(f'loading model "{saved_name}" ...')
-model = DQN.load('trained_models\\'+saved_name, env=env)
 # model = DQN.load('trained_models\\'+saved_name, env=env)
+model = PPO.load('trained_models\\'+saved_name, env=env)
 
 # for player 2
 model2 = copy(model) # should this be deep? 
@@ -60,7 +60,7 @@ start = time()
 obs = env.reset()
 env.game.SetRenderer('colortext')
 renderer:HOMMColorTextConsoleRender = env.game.renderer
-renderer.print_battles = False
+renderer.print_battles = True
 renderer.interactive_play = True
 for i in range(max_steps):
     if env.game.map.curr_player_idx == 0:
@@ -88,6 +88,7 @@ print(f'after {i} steps played in {curr_time:> 5.2f}s: game.ended={env.game.ende
 # print('rendering...\n')
 input('press any key to render the game...')
 if renderer:
+    renderer.print_battles = False # this is to speed things up a bit
     renderer.__init_image_capture__()
     renderer.Playback()
 
